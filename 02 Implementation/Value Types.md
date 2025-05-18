@@ -1,5 +1,3 @@
-#lodge_implementation 
-
 There is a potential wrinkle in some cases where, despite compatible interfaces, the programmer would not want a type to work with another.
 
 

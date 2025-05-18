@@ -1,5 +1,3 @@
-#lodge_implementation 
-
 ## Compiler Frontend
 [[Lodge Parsing]]
 	Preprocessor

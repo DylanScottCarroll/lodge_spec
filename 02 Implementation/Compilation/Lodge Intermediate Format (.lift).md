@@ -1,5 +1,3 @@
-#lodge_implementation 
-
 Stored in `*.lift` files (Lodge Intermediate FormaT)
 
 

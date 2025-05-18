@@ -1,5 +1,3 @@
-#lodge_implementation 
-
 ## Function definition Locations
 
 Regardless of where a function is defined, its code will be in the code segment of the compiled program.

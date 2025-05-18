@@ -1,5 +1,3 @@
-#lodge_implementation 
-
 Ttables in lodge are the fundamental way that it's typing system is implemented.
 
 When a reference type is held inside of a variable it's [[Lodge Thing|thing]] points to that value in memory as well as pointing to the entry in its ttable that translates from the interface of that container to the fields and methods of that value's concrete type.

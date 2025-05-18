@@ -1,5 +1,3 @@
-#lodge_implementation
-
 Of course, we will need to know more about [[01 Statements]] first.
 
 ## Preprocessor
