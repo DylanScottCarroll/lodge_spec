@@ -4,7 +4,7 @@
 [[Lodge Parsing]]
 	Preprocessor
 	Tokenizer
-	LR Parser
+	LL Parser
 
 The compiler frontend takes as input a lodge source code file, and outputs that `.lift` file representing that lodge file. 
 

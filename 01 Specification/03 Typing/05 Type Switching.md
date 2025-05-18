@@ -6,25 +6,25 @@ Inside each of those blocks, the programmer can reference the original variable 
 (List | Int | String) variable := !! Something
 swype variable {
 	List : { print(length(variable)) },
-	Int  : { print(variable) } ,
-	*    : { !- If there were other possible cases, the * captures all of them -! },
+	Int  : { print(variable/2) } ,
+	*    : { Catches the remaining cases },
 }
 
 ```
+
+#expand: The `*` case implies that the variable should have an interface  
 
 
 ```
 (Int | String) var = "11"
 
-Int var2 = swype var {Int: {var/10}, String: {0} }
+Int var2 = swype var {Int: { var/10 }, String: { 0->Int / 10 } }
 
 ```
 
-## Switching Concrete Types
-By default, type switching simply tests if the object being switched is compatible with the interface. 
 
 ## Switching multiple types at once
-This is particularly useful for imitating the behavior of [[01 Classes#Method Overloading|Method Overloading]] 
+This is particularly useful for imitating the behavior of [[01 Constructors#Method Overloading|Method Overloading]] 
 
 ```
 (int | str) a := 10

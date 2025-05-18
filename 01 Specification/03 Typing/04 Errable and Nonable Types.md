@@ -4,11 +4,11 @@ Errable and Nonable types simply refer to any type union that contains `Err` or 
 Types with the `!` token are unioned with `Err`
 
 ``` Lodge
-(Err | String)
+(Err | Str)
 
 !! Is the same as
 
-!Str
+Str!
 
 ```
 
@@ -21,5 +21,5 @@ Types with the `?` token are unioned with `None`
 
 !! Is the same as
 
-?Str
+Str?
 ```

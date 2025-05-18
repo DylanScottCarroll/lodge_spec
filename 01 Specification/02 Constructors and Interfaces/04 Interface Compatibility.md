@@ -2,4 +2,4 @@ Interface compatibility describes candidacy for polymorphism in Lodge.
 
 The concept of a compatible interface refers to the ability for an interface to be substituted for another without issue. In order for an interface to be compatible with another, that interface must be a superset of the other interface. If we have two interfaces A and B, B is compatible with A, if there are no methods or fields in A that are missing from B.  In other words, if B would satisfy promising A, then B is compatible with A.
 
-For example, the Int interface is not compatible with the Str interface because it fails to implement several of the methods that the string class like length and lowercase. In other words, 
+For example, the Int interface is not compatible with the Str interface because it fails to implement several of the methods that the string class like length and lowercase. However, the Int interface is compatible with the Float interface as everything that can be done to a float can also be done to an integer.

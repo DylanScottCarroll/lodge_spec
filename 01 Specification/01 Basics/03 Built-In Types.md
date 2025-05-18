@@ -1,4 +1,4 @@
-## Integers
+## Int
 value type
 
 | size | signed | Unsigned |
@@ -45,7 +45,7 @@ Uses
 * Indicate that something does not exist in cases where using null doesn't make sense.
 * When a variable has a None in its union, the interface is empty and you would need to check that the value is not None in a [[05 Type Switching|type switch]] before you could do any operations with it.
 * If that variable is always initialized to None, it could eliminate the chance of null pointer exceptions by forcing the None value check.
-* Used as a default value for function arguments when that argument doesn't always need to be present. This is useful for [[07 Functions#Variadic Functions|variatic functions and optional parameters]].
+* Used as a default value for function arguments when that argument doesn't always need to be present. This is useful for [[08 Functions#Variadic Functions|variatic functions and optional parameters]].
 
 
 
@@ -57,7 +57,7 @@ All data structure types are reference types
 * literal: `(value1, value2, value3)`
 	* `(value,)` for a single value
 * type definition: `(type1, type2, type3)`
-	* `(type : size)` when it's all the same type
+	* `(Type : size)` when it's all the same type
 * immutable value types
 * You must declare the type for each variable in the tuple
 
@@ -69,51 +69,49 @@ All data structure types are reference types
 ```
 
 
-## Array
+## List
 * literal: `[value1, value2, value3]`
-* type definition: `[type : size]`
-	* note: arrays can only have one type (or union)
+* type definition: `[Type]`
+	* The type of all elements of a list must match
 * mutable reference types
 * Cannot grow or shrink
 * The type (union) must be the same for each element in the array
 ```
-[Int] arr1 := [0, 1, 2, 3, 4]
-var arr2 := [0, 1, 2, 3, 4]
+[Int] list1 := [0, 1, 2, 3, 4]
+var list2 := [0, 1, 2, 3, 4]
 ```
 
 
-## List 
-* literal: `<value1, value2, value3>`
-* type definition: `<type>`
-* mutable reference type
-* can grow and shrink
-
-```
-<Int> list := <0, 1, 2, 3, 4> 
-var list2 := <5, 6, 7, 8, 9>
-```
-
-
-## Dictionary
+## Dict
 * literal: `{ key1 : value1, key2 : value2}`
-* type definition: `{type1 : type2}`
+* type definition: `{Type1 : Type2}`
 * Mutable reference type
 * Implemented as a hash table
 
 ```
-{Str : Int} aDictionaty := {"A" : 1, "B" : 20, }
+{Str : Int} aDictionaty := { "A" : 1, "B" : 20}
 ```
 
 
 ## Set
 * literal: `{value1, value2, value3}`
-* type definition: `{type}`
+* type definition: `{Type}`
 * Implemented as a hash set
 
 ``` Lodge
-{Int} set1 = {2, 4, 6, 8}
+{Int} set1 = {{ 2, 4, 6, 8 }}
 ```
 
+
+## Generator
+* Literal: No direct literal, but range expressions can be used
+	- <start:stop:end>
+- Type
+	- \<Type\>
+
+``` Lodge
+<Int> allSquares = <:>**2
+```
 
 ## Value Types vs Reference Types
 All values in Lodge are represented in memory by a [[Lodge Thing|thing]]. 

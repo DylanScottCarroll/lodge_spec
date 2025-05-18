@@ -1,0 +1,1 @@
+#expand: Create a more unified description of the type expression syntax

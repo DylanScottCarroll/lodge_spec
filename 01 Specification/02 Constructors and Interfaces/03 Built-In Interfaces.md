@@ -3,8 +3,14 @@ The broadest possible interface. Every single object in lodge can be placed insi
 
 ## Type Interfaces
 Every concrete type in Lodge automatically has an associated interface.
-## Int interface
-## Float Interface
+
+## Iterator
+
+## Iterable
+A value that contains the function `Iterator() iterator`  
+
+## Generator\<T>
+Specified by ``<%>``
 
 ## Err Interface
 
@@ -13,7 +19,7 @@ interface Err {
 	get Str Type
 	get Str Message
 
-	fun $() T
+	fun $T () T
 
 	!! ...
 }
@@ -22,8 +28,6 @@ interface Err {
 ## Object Interface
 ``` Lodge
 interface Object {
-	fun repr() Str
-
 	!! ...
 }
 ```

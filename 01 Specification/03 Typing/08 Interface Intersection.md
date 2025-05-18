@@ -22,11 +22,11 @@ Any code dealing with the intersection of several getters must be able to handle
 For example, when merging the two following interfaces:
 ``` Lodge
 interface A {
-	get val int
+	get Int val
 }
 
 interface B {
-	get val string
+	get String val
 }
 ``` 
 The result of `(A | B) as C` would be the following:
@@ -62,7 +62,7 @@ interface C {
 ```
 
 ### Merging Candidate Methods
-<u>This section needs to be expanded</u>
+#expand
 
 For merging methods, candidacy is still determined by the name of the method, but the type of a method is more complex.
 

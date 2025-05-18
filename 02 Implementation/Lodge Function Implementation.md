@@ -18,7 +18,7 @@ Upon the first yield statement being encountered, the function state is copied i
 When the generator is entered for the second time, the values of local variables are copied out of the closure and back onto the stack, then, the function will jump back to the location that it was most recently yielded out of.
 
 
-I still need to make a decision about what generator scheme I'm going to use:``z [[07 Functions#Generator Functions|generator functions]]
+I still need to make a decision about what generator scheme I'm going to use:``z [[08 Functions#Generator Functions|generator functions]]
 
 
 

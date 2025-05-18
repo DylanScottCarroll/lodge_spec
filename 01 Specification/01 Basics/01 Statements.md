@@ -12,8 +12,8 @@ Int x := f(arg1,
 	       arg2,
 	       arg3)
 
-List l := <val1, val2,
-	       val3, val4>	
+ [Int] l := [val1, val2,
+	       val3, val4]	
 
 !! Example of rule 2
 Int y := 10 +

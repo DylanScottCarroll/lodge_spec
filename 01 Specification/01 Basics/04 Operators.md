@@ -8,8 +8,6 @@
 | *   | multiplication                   |
 | %   | modulus                          |
 | **  | power                            |
-|     |                                  |
-
 
 
 ## Logical Operators
@@ -43,63 +41,58 @@ The value equivalence operator `==` should not be confused with the assignment o
 | <<  | left shift               |
 
 ## Assignment Operators
-| op  | action     |
-| --- | ---------- |
-| :=  | assignment |
-| ++  | increment  |
-| --  | decrement  |
-
-There are also forms such as `+=`, `-=`, `*=`, `/=`, and `**=` that are shorthand for performing an operation and then assigning the result to the first operand (assuming that operand is an existing identifier). Any operator except assignment operators and unary operators followed by a = will be treated as being a part of this shorthand.
+| op    | action                                                                                              |
+| ----- | --------------------------------------------------------------------------------------------------- |
+| :=    | assignment                                                                                          |
+| ++    | increment                                                                                           |
+| --    | decrement                                                                                           |
+| {op}= | Any other infix operator followed by an '=' will be the same as that operator's assignment operator |
 
 ## Other Operators 
-| op  | action                                                 |
-| --- | ------------------------------------------------------ |
-| :   | type conversion                                        |
-| ()  | call as a function                                     |
-| []  | indexing and slicing                                   |
-| ->  | Virtual field (gets field? but falls back to indexing) |
-| !   | Error Resolution                                       |
-| ?   | None Resolution Operator                               |
-| #   | hash                                                   |
-| $   | broadcasting directive                                 |
-| @   | other                                                  |
-
+| op  | action                   |
+| --- | ------------------------ |
+| ->  | type conversion          |
+| ()  | call as a function       |
+| []  | indexing and slicing     |
+| !   | Error Resolution         |
+| ?   | None Resolution Operator |
+| $   | broadcasting directive   |
+| #   | hash                     |
+| @   | other                    |
 
 ## Broadcasting Directive
-Using the $ symbol before an operator indicates that the operation should be broadcast. This means that 
+Using the $ symbol after an operator indicates that the operation should be broadcast. For operands of Iterators, 
 
 
 This can be used to expand mathematical operations
 ```
-var list =  range(10):List
-var powers_of_two = 2 ~** list
+var list = [0:10]
+var powers_of_two = 2 **$ list
 ```
 
-
+Function calls can also be broadcast
 ```
-var values = (range(314) ~/ 100):list
-var mapped_values = cos~(values) !!This applys the cosine function to every
-```
-
-
-```
-(arg){}~()
+var values = ( [:314] /$ 100 )
+var mapped_values = cos(values)$ !!This applys the cosine function to every value in values
 ```
 
-<u>This section needs to be expanded.</u>
+You can also broadcast generator objects, which will be evaluated lazily
+``` Lodge
+<Int> everySquare = <::> ** 2 
+```
 
 ## Type Conversion Operator
-The type conversion operator `:` is the way to convert an object of one type into another.
+The type conversion operator `->` is the way to convert an object of one type into another.
 
 It is particularly useful for conversion into strings for representational purposes:
 ``` Lodge
-Str myStrRepr := myObj:str
+Str myStrRepr := myObj->str
 ```
 
 
 Or for conversions between numerical types
 ``` Lodge
-Int myInt := myFloat:int
+Int myInt := myFloat->int
 ```
 
 ## Error Resolution Operator
@@ -228,7 +221,7 @@ not (unary)
 **
 
 
-!! Pre and post increment operators
+!! Increment operators
 ++ -- 
 
 
@@ -241,7 +234,7 @@ not (unary)
 !
 
 !! Special Postfix Operators
-()  []   ->  :
+()  []   -> 
 
 
 .

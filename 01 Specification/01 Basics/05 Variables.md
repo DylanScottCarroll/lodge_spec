@@ -72,17 +72,17 @@ The auto keyword will look at the entire scope that it's variable is being bound
 
 Take this example:
 ```
-fun functionName(auto arg) {
+fun functionName ReturnType(auto arg) {
 	arg.name = "Name"
 	Float result = arg.takeAction(10)
 }
 ```
 
-For this function the `arg` variable will have the following interface:
+For this function the `arg` variable will have approximately the following interface:
 ```
-Interface {
+Interface InterfaceName{
 	Str name
-	fun takeAction(Int) Float
+	fun takeAction Float(Int)
 }
 ```
 
