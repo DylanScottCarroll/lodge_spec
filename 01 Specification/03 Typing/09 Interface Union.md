@@ -58,5 +58,7 @@ interface C {
 
 ### Methods with shared names
 
+<u>This section needs to be expanded</u>
+
 The behavior of method merging is somewhat complex and I haven't worked it out all the way yet.
 

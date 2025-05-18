@@ -1,4 +1,4 @@
-# Type Unions and Type Intersections
+## Type Unions and Type Intersections
 Type unions and type intersections are two ways of creating composite types out of multiple other types.
 
 [[03 Type Unions|Type unions]] are the most common and allow the programmer to create a flexible variable that hold multiple different concrete types, while still being fully type checked.

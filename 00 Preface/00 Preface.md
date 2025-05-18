@@ -1,6 +1,7 @@
 Specification Version: 0.0.1
 Language Version: 0.0.1
 
+Author: Dylan Carroll
 ## Versioning
 The versions of the specification and the language consist of three numbers. For the spec version and the language version, the first two numbers of each represent major and minor versions.
 

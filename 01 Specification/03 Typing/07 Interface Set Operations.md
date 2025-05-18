@@ -1,4 +1,4 @@
-# Interface Intersection and Interface Union
+## Interface Intersection and Interface Union
 These operations differ somewhat from strict definitions of mathematical set operations as the equivalence of interface members is depended on both the name and types of the members. Additionally, the merging of two members is more complex than simply checking for their presence. See the pages on [[08 Interface Intersection|interface intersection]] and [[09 Interface Union|interface union]] for more information on this behavior.
 
 

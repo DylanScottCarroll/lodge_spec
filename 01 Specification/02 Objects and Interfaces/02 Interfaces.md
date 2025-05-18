@@ -1,6 +1,6 @@
 ## Interfaces
 
-An Interfaces is a set of fields, properties, and methods. All classes have an interface, which is made up of the public members (methods and fields) of that class. Interfaces exist separate from the implementation behind those members.
+An Interfaces is a set of fields, properties, and methods. All implementations  have an interface, which is made up of the public members (methods and fields) of that class. Interfaces exist separate from the implementation behind those members.
 
 An interface in Lodge is much more than it is in other programming languages and it is used throughout Lodge even when not explicitly defined by the programmer.
 
@@ -30,12 +30,21 @@ Here is an example:
 
 ``` Lodge
 interface InterfaceName {
-	int fieldName
+	Int fieldName
 
-	fun FunctionName(int arg1, str arg2) int
+	fun FunctionName(Int arg1, Str arg2) Int
 
-	get propertyName int
-	set propertyName int
+	get propertyName Int
+	set propertyName Int
+}
+
+```
+
+
+## Generic Interface
+```
+interface A<T> {
+	T fieldName 
 }
 
 ```

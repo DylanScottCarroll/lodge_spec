@@ -11,7 +11,7 @@ It will have all symbol names and type information preserved in order to allow f
 
 I want it to be a good target for interpretation as well as further compilation as I believe an interpreter backend will be a simpler than the compiler backend 
 
-# Specification
+## Specification
 
 ## Inspo
 ### LLVM

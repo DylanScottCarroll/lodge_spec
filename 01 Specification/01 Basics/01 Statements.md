@@ -1,4 +1,4 @@
-# Statements
+## Statements
 As lodge has no statement terminator, the end of statements is automatically inferred by newline characters in most cases. However, there are cases where multiple lines can be considered a single statement. This means that Lodge is not totally whitespace agnostic like other languages. It is still agnostic towards tab and space characters.
 
 In Lodge, the statement termination happens at newlines by default, but statements may be joined together based on some rules. 

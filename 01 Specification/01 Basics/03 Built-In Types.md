@@ -3,32 +3,33 @@ value type
 
 | size | signed | Unsigned |
 | :--- | :----- | :------- |
-| 8    | `i8`   | `u8`     |
-| 16   | `i16`  | `u16`    |
-| 32   | `i32`  | `u32`    |
-| 64   | `i64`  | `u64`    |
+| 8    | `I8`   | `U8`     |
+| 16   | `I16`  | `U16`    |
+| 32   | `I32`  | `U32`    |
+| 64   | `I64`  | `U64`    |
 
 ## Floats
 value type
 
 | size | name  |     |
 | :--- | :---- | --- |
-| 32   | `f32` |     |
-| 64   | `f64` |     |
+| 32   | `F32` |     |
+| 64   | `F64` |     |
 
 ## Booleans
 value type
 
 | Size | name |
 | ---- | ---- |
-| 8    | bool |
+| 8    | Bool |
 
 ## Strings
 reference type
 ### Str
 * A reference type object much like strings in other languages
 * Basically just an immutable array of chars
-* [[Lodge Text Encoding]]
+	* Potentially just a chunk of data, allowing for various representations
+	* [[Lodge Text Encoding]]
 * String literals are created using text surrounded by double quotes like this:
 ``` Lodge
 Str aString := "A new string literal"
@@ -48,8 +49,9 @@ Uses
 
 
 
-# Data Structure Types
+## Data Structure Types
 All data structure types are reference types
+
 
 ## Tuple
 * literal: `(value1, value2, value3)`
@@ -66,6 +68,7 @@ All data structure types are reference types
 (Int: 2, Str) tuple3 := (1, 2, "a", b")
 ```
 
+
 ## Array
 * literal: `[value1, value2, value3]`
 * type definition: `[type : size]`
@@ -74,9 +77,10 @@ All data structure types are reference types
 * Cannot grow or shrink
 * The type (union) must be the same for each element in the array
 ```
-[int: 10] arr1 := [0, 1, 2, 3, 4]
+[Int] arr1 := [0, 1, 2, 3, 4]
 var arr2 := [0, 1, 2, 3, 4]
 ```
+
 
 ## List 
 * literal: `<value1, value2, value3>`
@@ -85,7 +89,7 @@ var arr2 := [0, 1, 2, 3, 4]
 * can grow and shrink
 
 ```
-<int> list := <0, 1, 2, 3, 4> 
+<Int> list := <0, 1, 2, 3, 4> 
 var list2 := <5, 6, 7, 8, 9>
 ```
 
@@ -97,8 +101,9 @@ var list2 := <5, 6, 7, 8, 9>
 * Implemented as a hash table
 
 ```
-{str : int} aDictionaty := {"A" : 1, "B" : 20, }
+{Str : Int} aDictionaty := {"A" : 1, "B" : 20, }
 ```
+
 
 ## Set
 * literal: `{value1, value2, value3}`
@@ -106,14 +111,14 @@ var list2 := <5, 6, 7, 8, 9>
 * Implemented as a hash set
 
 ``` Lodge
-{int} set1 = {2, 4, 6, 8}
+{Int} set1 = {2, 4, 6, 8}
 ```
 
 
 ## Value Types vs Reference Types
-All values in rust are represented in memory by a [[Lodge Thing|thing]]. 
+All values in Lodge are represented in memory by a [[Lodge Thing|thing]]. 
 The thing contains a field for the value and a field for type information.
 
 For value types, the value field is the value itself, but for reference types the value is a reference to the object in memory. 
 
-For smaller value types like `i8`s, there are wasted bytes in the high end of the value portion of the thing. To combat this, some types such as arrays may be implemented in such a way as to store raw values rather than things when the type is restricted to that of a value type. 
+For smaller value types like `I8`s, there are wasted bytes in the high end of the value portion of the thing. To combat this, some types such as arrays may be implemented in such a way as to store raw values rather than things when the type is restricted to that of a value type. 

@@ -1,0 +1,1 @@
+Lodge is a statically typed language, meaning that all type checks occur statically at compile time and that no operation can cause a type error at runtime. However, in comparison to other statically typed languages, Lodge's type system allows more type flexibility and automatic typing.

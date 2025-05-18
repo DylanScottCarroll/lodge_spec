@@ -64,12 +64,24 @@ interface C {
 ### Merging Candidate Methods
 <u>This section needs to be expanded</u>
 
+For merging methods, candidacy is still determined by the name of the method, but the type of a method is more complex.
 
-For merging methods, candidacy is still determined by the name of the method, arguments are treated like setters, and return values are treated like getters.
+For the sake of flexibility, the names of method arguments are not considered at all, only their types. Due to their similarities arguments are treated as setters, and return values are treated as getters.
 
-For simplicity, method arguments are merged position-wise and their names are not considered at all.
-However, if two methods have matching argument names that are not positionally aligned, a compiler warning will 
+#### Merging Argument Types
+The merging of method arguments begins at the first pair of positional arguments and merges their types, continuing until their is a failure or until one method is out of arguments.
 
-This gets more complex when talking about optional parameters and variadic functions.
+If one function has more positional arguments than another, the merge will fail unless the excess arguments are optional (have default values)
+
+#### Merging Keyword arguments
+If 
+
+
+
+#### Implementation Note:
+
+Keyword arguments supplied statically in the code are compiled in the same way as arguments provided by keyword. 
+
+
 
 

@@ -3,11 +3,20 @@ For types inside a type union, it may sometimes be useful to treat different typ
 Inside each of those blocks, the programmer can reference the original variable as if it were the more specific type without breaking type safety.
 
 ``` Lodge
+(List | Int | String) variable := !! Something
 swype variable {
-	List : { print(length(variable)) }
-	Int  : { print(variable) } 
-	*    : { !- If there were other possible cases, the * captures all of them -! }
+	List : { print(length(variable)) },
+	Int  : { print(variable) } ,
+	*    : { !- If there were other possible cases, the * captures all of them -! },
 }
+
+```
+
+
+```
+(Int | String) var = "11"
+
+Int var2 = swype var {Int: {var/10}, String: {0} }
 
 ```
 

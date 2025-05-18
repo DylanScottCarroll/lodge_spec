@@ -1,14 +1,16 @@
 ## Mathematical Operators
-| op  | action           |
-| --- | ---------------- |
-| +   | addition         |
-| -   | subtraction (and unary negation)    |
-| /   | division         |
-| //  | integer division |
-| *   | multiplication   |
-| %   | modulus          |
-| **  | power            |
-| /^  | root             |
+| op  | action                           |
+| --- | -------------------------------- |
+| +   | addition                         |
+| -   | subtraction (and unary negation) |
+| /   | division                         |
+| //  | integer division                 |
+| *   | multiplication                   |
+| %   | modulus                          |
+| **  | power                            |
+|     |                                  |
+
+
 
 ## Logical Operators
 The operators here that are words are reserved keywords
@@ -36,7 +38,7 @@ The value equivalence operator `==` should not be confused with the assignment o
 | &   | bitwise and              |
 | \|  | bitwise or               |
 | ^   | bitwise xor              |
-| ~   | bitwise not (compliment) |
+| -   | bitwise not (compliment) |
 | >>  | right shift              |
 | <<  | left shift               |
 
@@ -50,17 +52,41 @@ The value equivalence operator `==` should not be confused with the assignment o
 There are also forms such as `+=`, `-=`, `*=`, `/=`, and `**=` that are shorthand for performing an operation and then assigning the result to the first operand (assuming that operand is an existing identifier). Any operator except assignment operators and unary operators followed by a = will be treated as being a part of this shorthand.
 
 ## Other Operators 
-| op  | action                   |
-| --- | ------------------------ |
-| :   | type conversion          |
-| ()  | call as a function       |
-| []  | indexing and slicing     |
-| !   | Error Resolution         |
-| ?   | None Resolution Operator |
-| #   | hash                     |
-| $   | other                    |
-| @   | other                    |
+| op  | action                                                 |
+| --- | ------------------------------------------------------ |
+| :   | type conversion                                        |
+| ()  | call as a function                                     |
+| []  | indexing and slicing                                   |
+| ->  | Virtual field (gets field? but falls back to indexing) |
+| !   | Error Resolution                                       |
+| ?   | None Resolution Operator                               |
+| #   | hash                                                   |
+| $   | broadcasting directive                                 |
+| @   | other                                                  |
 
+
+## Broadcasting Directive
+Using the $ symbol before an operator indicates that the operation should be broadcast. This means that 
+
+
+This can be used to expand mathematical operations
+```
+var list =  range(10):List
+var powers_of_two = 2 ~** list
+```
+
+
+```
+var values = (range(314) ~/ 100):list
+var mapped_values = cos~(values) !!This applys the cosine function to every
+```
+
+
+```
+(arg){}~()
+```
+
+<u>This section needs to be expanded.</u>
 
 ## Type Conversion Operator
 The type conversion operator `:` is the way to convert an object of one type into another.
@@ -79,28 +105,51 @@ Int myInt := myFloat:int
 ## Error Resolution Operator
 Shorthand for resolving errors
 
-``` Lodge
-fun function (Err | Str) {
-	(Err | Str) val := errableFunction()
-	swype val Err {
-		return Err
-	} swype * {
-		!! Operations on val as a Str
-	}
-}
-```
+Errable functions are functions that have the potential to return an error, meaning that the return type is the union of some type and `Err`. In order to use the return value of an errable function, you need to handle the possibility of an error.
 
-Is equivalent to
+Often times, handling an error just consists of passing it further up the call stack for the caller do handle. For this, the unary `!` operator is used. It will evaluate to a non-Err value or return Err from the function.
 
+Here is a common pattern:
 ``` Lodge
-fun function (Err | Str) {
-	Str val := !errableFunction()
-	
+fun function() !Int {
+	Int val := !errableFunction()
+	return val
 	!! Operations on val as a Str
 }
 
 ```
 
+Which is equivalent to:
+
+``` Lodge
+fun function() (Err | Int) {
+	(Err | Int) val := errableFunction()
+	return swype val {
+		Err : { Err }
+		*   : { val }
+	}
+}
+```
+
+### Binary Error Resolution Operator
+Sometimes, instead of passing up the error, it is better simply to have a default value in case of an error. For these cases, the error resolution operator can also be used as a binary operator.
+
+``` Lodge
+fun function() !Err {
+	Int val := errableFunction() ! -1
+} 
+```
+Is equivalent to
+``` Lodge
+fun function() !Int {
+	!Int result = errableFunction()
+	Int val := swype result {
+		Err : { -1 }
+		Str : { result }
+	}
+} 
+
+```
 
 ### In Type Definitions
 The `!` token is also used to make an Errable type:
@@ -112,7 +161,7 @@ fun errableFunction() (Err | Str) {
 ```
 
 ``` Lodge
-fun errableFunction() $Str {
+fun errableFunction() !Str {
 	!! ...
 }
 ```
@@ -128,10 +177,74 @@ The following two code blocks are equivalent:
 
 Int variable = swype variable {
 	None : {-1}
-	*    : { temp }
+	Int 2 : { temp }
 }
 ```
 
 ``` Lodge
 Int variable = nonableFunction() ? -1
 ```
+
+
+## Operator Precedence
+
+
+```
+!! Assignment
+
+:=  +=  -=  *=  /=  //=  ...
+
+!! Logical
+
+or
+xor
+and
+not (unary)
+
+==  !=  is  isnt
+
+
+<  >  >= <=
+
+
+!! Numerical
+
+>>  <<
+
+
+|
+^
+&
+
+
++ -
+
+
+*  /  //   %
+
+
+-  ~ (prefix)
+
+**
+
+
+!! Pre and post increment operators
+++ -- 
+
+
+
+!! Special Infix operators
+!  ?
+
+
+!! Special Prefix Operators
+!
+
+!! Special Postfix Operators
+()  []   ->  :
+
+
+.
+
+```
+

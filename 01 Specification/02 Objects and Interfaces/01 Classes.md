@@ -1,6 +1,6 @@
-# Class Definition Syntax
+## Class Definition Syntax
 
-## Basic Syntax
+### Basic Syntax
 ``` Lodge
 class ClassName  {
 	promises Interface1, Class1
@@ -14,7 +14,7 @@ class ClassName  {
 }
 ```
 
-## Anonymous Classes
+### Anonymous Classes
 Classes can also be created without names in order to allow the creation of an object without needing to write a dedicated named class for it.
 
 The anonymous class will participate in the typing system as normal, and can even be placed in other variables using the `var` keyword.
@@ -27,8 +27,8 @@ var anonObj := class {
 
 Even though the class does not have a defined name, it will still have an internal name and interface like any other class.
 
-# Promising
-When a class promises an interface or a class, all public fields and methods are required to be explicitly defined in the promising class.
+## Promising
+When a class promises an interface, all public fields and methods are required to be explicitly defined in the promising class.
 
 If a promise results in a name collision with previous promises, this will be accompanied by an error unless the function signatures are identical / the field types are identical.
 
@@ -44,7 +44,7 @@ class ClassName  {
 }
 ```
 
-# Using
+## Using
 
 When a class uses another class, all methods and fields (external and internal) from the superclass are implicitly copied into the subclass. Methods created in a class via using satisfy promise requirements.
 
@@ -59,7 +59,7 @@ class ClassName  {
 }
 ```
 
-# Public/Private Methods and Fields
+## Public/Private Methods and Fields
 
 ``` Lodge
 class A {
@@ -88,10 +88,10 @@ Defining properties is done using the get and set keywords
 ``` Lodge
 
 class A {
-	get propertyName type {
+	get propertyName Type {
 		!! Code for getting the value
 	}
-	set propertyName type {
+	set propertyName Type {
 		!! Code for setting the value
 	}
 }
@@ -110,7 +110,7 @@ a.properyName := 10
 a.propertyName += 10
 ```
 
-# Generics
+## Generics
 
 ``` Lodge
 class A<T> {
@@ -171,7 +171,7 @@ b2.field := "string"
  In class A, both strings and integers can be placed into the field regardless, but with class B, only the generic type specified at the creation of the object can be placed in the field.
 
 
-# Nested Classes
+## Nested Classes
 
 Classes can be defined within other classes. This class can be accessed within the outer class and from the program at large through the outer class.
 
@@ -194,7 +194,7 @@ A.B b := a.F()
 ```
 
 
-# Operator Methods
+## Operator Methods
 
 ``` Lodge
 class A {
@@ -227,7 +227,7 @@ If `A` does *not* implement `/` for the type `B`, then the compiler will check f
 The intention being that even if `A` was implemented with no knowledge of `B`, `B` can be implemented such that it is still compatible with `A`, by implementing the reciprocal of the operator.
 
 
-# Method Overloading
+## Method Overloading
 * Lodge does not have method overloading in the typical sense currently
 	* Recent improvements in how method signatures are defined has made me rethink this
 
