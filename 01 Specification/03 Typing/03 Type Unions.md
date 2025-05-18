@@ -23,4 +23,4 @@ intstr variable := ...
 
 
 ## The Interface of a Type Union
-The interface of a type union is the [[08 Interface Intersection|interface intersection]] of the interfaces of all of the types that make up the union.
+The interface of a type union is the [interface intersection](08%20Interface%20Intersection.md) of the interfaces of all of the types that make up the union.
