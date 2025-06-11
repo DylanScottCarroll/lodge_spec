@@ -1,0 +1,1 @@
+An interface set is kind of interface made out of a set of multiple interfaces.

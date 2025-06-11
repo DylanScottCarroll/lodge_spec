@@ -1,6 +1,6 @@
 Interface intersection is the process by which multiple [[02 Interfaces|interfaces]] are combined into one for the purposes of [[03 Type Unions|type unioning]].
 
-When several types exist in a union together, that type union will have its own interface that is the intersection of the public interfaces of all participating types.
+When several types exist in a union together, that type union will have its own interface that is the intersection of the public interfaces of all participating types where compatibility is determined by compatibility with all interfaces in a [[10 Interface Set|interface set]].
 
 It is worth noting that not every intersection is possible. Since any setters or method arguments require their types to be intersected, there is the chance that a namespace collision results in that type intersection being impossible.
 ## Process of interface intersection
@@ -44,6 +44,8 @@ In the case where the type union of the getter types results in an empty interfa
 
 The type of a setter in the intersected interface must only be able to accept types that **all** setters matching the candidate can accept. Thus, the new type of the setter will be the [[06 Type Intersections|type intersection]] (not interface intersection). 
 
+It may be the case that the necessary interface union fails, in which case the candidate member setter will not be present in the inrerface.
+
 For example, when merging the two following interfaces:
 ``` Lodge
 interface A {
@@ -62,26 +64,7 @@ interface C {
 ```
 
 ### Merging Candidate Methods
-#expand
-
-For merging methods, candidacy is still determined by the name of the method, but the type of a method is more complex.
-
-For the sake of flexibility, the names of method arguments are not considered at all, only their types. Due to their similarities arguments are treated as setters, and return values are treated as getters.
-
-#### Merging Argument Types
-The merging of method arguments begins at the first pair of positional arguments and merges their types, continuing until their is a failure or until one method is out of arguments.
-
-If one function has more positional arguments than another, the merge will fail unless the excess arguments are optional (have default values)
-
-#### Merging Keyword arguments
-If 
-
-
-
-#### Implementation Note:
-
-Keyword arguments supplied statically in the code are compiled in the same way as arguments provided by keyword. 
-
+See the section on [[Interface of a Function#Type Union|function interfaces]].
 
 
 

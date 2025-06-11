@@ -1,16 +1,8 @@
 A union between multiple interfaces is the result of a [[06 Type Intersections]]. 
 
 
-Interface unions are somewhat more complex than [[08 Interface Intersection|interface intersections]], as there are cases where the union will fail due to incompatibility between 
-
-
 ## Process of interface union
-
-Read [[08 Interface Intersection]] first as that page has more details and examples of this process.
-
-To start with, all members from every participant are candidates for inclusion in the union
-
-However, there may be some elements with shared names, that require special consideration for their types. This is also the way in which some interface unions may fail.
+To start with, an interface is formed by placing the members of all participating interfaces together. However, there may be some elements with shared names, that require special consideration for their types. This is also the way in which some interface unions may fail.
 
 ### Getters with shared names
 An object that is [[04 Interface Compatibility|compatible]] with the union of multiple interfaces must be able to properly behave like any of the of the types in the interface union. For example, consider the [[06 Type Intersections|type intersection]] `(A & B)`. Any class that would be compatible with this interface union must be compatible with both A and B in every case. Thus, if both A and B have a getter of the same name, those two getters must be mutually compatible (A is compatible with B and B is compatible with A). Mutual compatibility requires that the two interfaces are identical.
@@ -20,11 +12,11 @@ If there are getters with shared names and all getters do not have the **same ex
 For example, consider merging the two following interfaces:
 ``` Lodge
 interface A {
-	set val int
+	get val Int
 }
 
 interface B {
-	set val string
+	get val Str
 }
 ``` 
 The line `(A & B)` would result in a compiler error.
@@ -57,8 +49,4 @@ interface C {
 
 
 ### Methods with shared names
-
-#expand
-
-The behavior of method merging is somewhat complex and I haven't worked it out all the way yet.
-
+See the section on [[Interface of a Function#Type Intersections|function interfaces]].

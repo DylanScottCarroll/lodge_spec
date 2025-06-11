@@ -2,4 +2,4 @@ Automatic Interfacing is the process by which a class that doesn't explicitly pr
 
 The result of automatic interfacing is that, objects can be placed into any container whose interface is a subset of that objects interface without needing to be explicitly declared. This is conveniently similar to duck typing while maintaining static type safety.
 
-See [[04 Interface Compatibility]]\
+See [[04 Interface Compatibility]]

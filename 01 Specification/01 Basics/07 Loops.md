@@ -1,11 +1,4 @@
 ## Loops
-
-Lodge has four kinds of loops:
-* plain loop
-* while loops
-* for loops
-* over loops
-
 ### Plain Loop
 A plain loop is a loop without any parameters. It is essentially the same as a `loop while true`, but it does not perform a comparison. It is usually used for replicating a do-while type pattern using a `break if` statement.
 Here is an example.
@@ -33,7 +26,7 @@ loop not stack.is_empty() {
 
 
 ### For Loop
-The over-loop works like Python's for-loop or for-each loops in other languages. It accepts any object that is compatible with the iterator interface and loops. It uses the `from` keyword to associate a name with the element from the iterator.
+The for-loop works like Python's for-loop or for-each loops in other languages. It accepts any object that is compatible with the iterator interface and loops. It uses the `from` keyword to associate a name with the element from the iterator. The type of the loop variable is inferred from the values in the container being iterated over.
 
 ``` Lodge
 !! Print all of the characters in the list
@@ -61,7 +54,7 @@ loop for a, b := list1, list2 {
 You can also add an option that will keep track of the index with the `at` keyword.
 ``` Lodge
 !! Print all of the characters in the list
-loop for c := char_list at i {
+loop for c, i := char_list, 0: {
 	print(c)
 }
 ```
@@ -73,17 +66,18 @@ The keywords `break` and `continue` work as they do in similar languages.
 `break` will exit the nearest loop that encapsulates it.
 `continue` will skip to the beginning of the nearest loop that encapsulates it
 
+### Conditional break/continue
 Lodge also has the ` break if ` and ` continue if ` statements which act as conditional statements
 
 For example, these two code blocks behave the same:
 ``` Lodge
-loop over value from someList {
+loop for value := value_list {
 	print(value)
 	
 	break if value == None
 }
 
-loop over value from someList {
+loop for value := value_list {
 	print(value)
 
 	if value == None {
@@ -92,8 +86,8 @@ loop over value from someList {
 }
 ```
 
-### Multiple break
-If the `break` keyword is followed immediately by an integer literal, the break statement will break out of that many nested loops. This value is 1 by default.
+### Deep break/continue
+If the `break` or `continue` keywords is followed immediately by an integer literal, the statement will apply  to that many nested loops. The value 1 is equivalent to an unmodified statement
 ```
 Float t = time()
 loop for i := :100 {

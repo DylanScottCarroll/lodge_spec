@@ -1,10 +1,10 @@
 ## Statements
-As lodge has no statement terminator, the end of statements is automatically inferred by newline characters in most cases. However, there are cases where multiple lines can be considered a single statement. This means that Lodge is not totally whitespace agnostic like other languages. It is still agnostic towards tab and space characters.
+As lodge has no statement terminator, the end of statements is automatically inferred by newline characters in most cases. However, there are cases where multiple lines can be considered a single statement. This means that Lodge is not totally whitespace agnostic. It is still agnostic towards tab and space characters.
 
-In Lodge, the statement termination happens at newlines by default, but statements may be joined together based on some rules. 
+In Lodge, statement termination happens at newlines by default, but statements may be joined together based on some rules. 
 1. If a line opens a bracket (such as: `( [ <` ), all lines until that bracket is closed will be treated as a single statement. However, the closing bracket will only be searched for until the end of the current block.
 2. If a line ends with an operator that requires another following operand, the following line will be treated as part of the same statement.
-3. If a line begins with an operator that requires an operand beforehand, the previous line will be treated as part of the same statement.
+
 
 ``` Lodge
 !! Examples of rule 1
@@ -19,11 +19,6 @@ Int x := f(arg1,
 Int y := 10 +
          11 +
 	     12
-
-!! Example of rule 3
-Int z := 10
-       + 11
-       + 12
 ```
 
 

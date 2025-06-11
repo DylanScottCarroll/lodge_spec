@@ -2,11 +2,11 @@
 
 Blocks are opened and closed by curly brackets `{}`. Many statements such as if statements, loops, and class definitions require blocks.
 
-Blocks in lodge create a new scope that can access variables from the outer scope, but whose variables only last during the scope of. 
+Blocks in lodge create a new scope that can access variables from the outer scope, but whose variables only last during the inner scope.
 
 ``` Lodge
 Int x := 0
-loop while x <= 10 {
+loop x <= 10 {
 	if x%2 == 0 
 		{ print(x) }	
 	x++

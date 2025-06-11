@@ -8,7 +8,7 @@ value type
 | 32   | `I32`  | `U32`    |
 | 64   | `I64`  | `U64`    |
 
-## Floats
+## Float
 value type
 
 | size | name  |     |
@@ -18,10 +18,7 @@ value type
 
 ## Booleans
 value type
-
-| Size | name |
-| ---- | ---- |
-| 8    | Bool |
+**Bool**
 
 ## Strings
 reference type
@@ -38,7 +35,8 @@ Str aString := "A new string literal"
 ## None
 value type
 
-Lodge None type can only have a single value: None
+The concrete type of the none constructor is a singleton
+
 The None type has a totally empty interface. 
 
 Uses
@@ -58,7 +56,7 @@ All data structure types are reference types
 	* `(value,)` for a single value
 * type definition: `(type1, type2, type3)`
 	* `(Type : size)` when it's all the same type
-* immutable value types
+	
 * You must declare the type for each variable in the tuple
 
 ``` Lodge
@@ -73,23 +71,22 @@ All data structure types are reference types
 * literal: `[value1, value2, value3]`
 * type definition: `[Type]`
 	* The type of all elements of a list must match
-* mutable reference types
-* Cannot grow or shrink
 * The type (union) must be the same for each element in the array
+
 ```
 [Int] list1 := [0, 1, 2, 3, 4]
 var list2 := [0, 1, 2, 3, 4]
 ```
 
 
-## Dict
-* literal: `{ key1 : value1, key2 : value2}`
-* type definition: `{Type1 : Type2}`
+## Map
+* literal: `{| key1 : value1, key2 : value2 |}`
+* type definition: `{|Type1 : Type2|}`
 * Mutable reference type
 * Implemented as a hash table
 
 ```
-{Str : Int} aDictionaty := { "A" : 1, "B" : 20}
+{|Str : Int|} aDictionaty := {| "A" : 1, "B" : 20|}
 ```
 
 
@@ -99,7 +96,7 @@ var list2 := [0, 1, 2, 3, 4]
 * Implemented as a hash set
 
 ``` Lodge
-{Int} set1 = {{ 2, 4, 6, 8 }}
+{|Int|} set1 = {| ~2, 4, 6, 8 |}
 ```
 
 

@@ -3,7 +3,7 @@ By default, constructors automatically allocate just the amount of memory needed
 
 
 ```
-constructor ArrayType {
+struct ArrayType {
 	
 }
 

@@ -1,4 +1,4 @@
-## Declaring functions
+# Declaring functions
 Function declarations in lodge use the `fun` keyword. When declaring a function, the name, arguments, return type, and function body must be specified.
 
 ## Syntax
@@ -15,28 +15,48 @@ fun functionName(type1 arg1, type2 arg2, ... ) {
 }
 ```
 
-Defining an anonymous function
+Defining an anonymous function:
 ``` Lodge
-var functionName = fun returnType(args)  {
+fun returnType(args) {
 	!! Function body
 }
  
 !! Lambda notation for brevity
 (args)=>{ !- Function body -! }
 ```
+The lambda notation will infer the return type based on the type of the expression being returned.
 
-Declaring a variable with the type of a function.
+Declaring a variable with the type of a function:
 ``` Lodge
 !! Refer to the type of an existing function by name
 functionName variableName := !! ...
 
 
-!! Describe the signature of 
-fun returnType(type1, type2, type3, ...) variableName := !! ...
+!! Describe the signature of the function
+(!- type expression -!) variableName := !! ...
 
 !! Howvever, it  is less verbose to use var
 var variableName := fun returnType(args)  { !-Function body-! }
 var variableName := (args)=>{ !-Function body-! }
+
+```
+
+## Type Expression for a Function Type
+The type expression for a function mirrors thy syntax for its arguments. The main difference  being that the positional and capture arguments do not take names. Optional arguments have a single equal sign `=` after them.
+
+```
+!! Full syntax
+ReturnType(Type, Type=, ... | Type keyword, Type keyword=, ..., [Type], {|Type|})
+
+!! Only positional arguments
+ReturnType(Type, Type2=, ..., TypeN)
+
+!! Only keyword arguments
+ReturnType(| Type1 keyword1, Type2 keyword2=, ..., TypeN keywordN)
+
+!! Only Captures
+ReturnType([Type])
+ReturnType({|Type|})
 
 ```
 
@@ -45,60 +65,54 @@ To return a value from a function, use the `return` keyword
 ### Implicit Return
 Absent the return keyword, a function will implicitly return the value of the final expression in the function body.
 
-## Auto Arguments
-
-```
-fun function(auto a) {
-	!!
-}
-
-```
-#expand
-
-## Optional Arguments / Default Values
+## Arguments 
+### Optional Arguments / Default Values
 Normally, a function expects to be provided with all of its arguments whenever it is called. However, it is possible to give a default value for an argument that it will take when not provided.
 
 * You can give a function optional arguments by giving those arguments default values
 * When calling the function, those arguments don't need to be given
-	* If you want to specify only an argument that comes after an optional argument, you must give that argument with the `arg = val` syntax.
+	* If you want to specify only an argument that comes after an optional argument, you must fill the space of that argument with an asterisk `*`.
 
 ``` Lodge
-fun f returnType(int a = 10, Int? b = None) {
+fun f returnType(Int a = 10, Int? b = None) {
 	!! Function body
 }
 
 f() !! case 1
 f(1) !! case 2
-f(b=2) !! case 3
+f(*, 2) !! case 3
 f(1, 2) !! case 4 
 ```
 
-## Providing Arguments by Keyword
+The order does not matter and optional 
 
-In addition to passing positional arguments by their position, it is also possible to specify the name.
+### Providing Arguments by Keyword
+By default, arguments can only be provided positionally.  If, however, one of the comma delimiters is replaced by `|` all following arguments will be keyword-only arguments. 
 
-All non-optional arguments must be provided exactly once, whether that be positionally or by keyword. Failing to do so will result in a compiler error.
+All non-optional keyword arguments must be provided exactly once. Failing to do so will result in a compiler error.
+Optional keyword arguments need not be supplied.
 
 ```
-fun functionName(Int x, Int y=2, ?Int z=None){
+fun functionName(Int x, Int y=10 | Int y, Int z=10){
 	!! Function body
 }
 
 !! Legal
-functionName(1, 2, 3)
-functionName(x=1, y=2, z=3)
-functionName(1, z=3)
+functionName(1, 2, y=3, z=4)
+functionName(1, y=2)
+functionName(1, *, y=2)
 
 !! Not legal
-functionName(y=2, z=3) !! x not provided
+functionName(1, z=3) !! Keyword argument 7 not provided
+functionName(x=2, y=2, z=3) !! Positional argument x not provided and Unexpected keyword argument x
 ```
 
 
-## Capturing Extra Arguments
+## Allowing Extra Arguments
 
 ### Capturing Extra Positional Arguments
 
-* Define a function with variadic arguments by placing `...` after the last argument. That name will then be treated like an array of those values within the function body. Other arguments. The type of this value will be an array of values with the specified type.
+* Define a function with variadic arguments by placing the argument inside square brackets. That name will then be treated like a list of that type within the function body.
 
 ``` Lodge
 fun f(int x, [Int vargs]) returnType {}
@@ -115,35 +129,12 @@ f(4, 0, 0, 0, 0, 100, 0) !! prints 6, 100
 It is also possible to give keyword arguments to a function that doesn't have those names as positional arguments as long as that function has somewhere to capture those keywords. This is done using the ** token.
 
 ``` Lodge
-fun functionName({Int kwargs}){
+fun functionName({|Int kwargs|}){
 	print(kwarg["keyword"])
 }
 
 functionName(keyword="Hello World") !!Prints "Hello World"
 ```
-
-
-### Positional-Only Arguments
-There are some cases in which it may be desirable to have positional arguments that cannot be provided through keywords or through dictionary expansion.
-
-```
-fun func(Int x | Int y, {Int kwargs}){
-	!! ...
-}
-
-func(1, 2) 
-func(1, y=2) 
-func(x=1, y=2) !! Compile error, x not provided
-func(1, 2, x=3) !! Allowed, "x" will be a key in the kwargs dict
-
-
-var dict =  {"x":1, "y":2}
-
-func(1, dict...) !! x=1, y=2, and "x" is a key in the kwargs dict 
-func(dict...) !! Compile error x not provided
-
-```
-
 
 
 ## Argument Expansion
@@ -184,7 +175,7 @@ fun func1(Int? a=None, Int? b=None, Int? c=None){
 	!! ...
 }
 
-fun func1(Int? a=None, {Int kwargs}){
+fun func1(Int? a=None, {|Int kwargs|}){
 	!! ...
 }
 
@@ -199,7 +190,7 @@ func1(dict...) !! a=1, b=2, c=3
 ## Generator Functions
 [[Lodge Function Implementation#Generator Functions|generator function implementation]]
 
-There is no special syntax for generator functions besides the yield keyword. Any function with the yield keyword in the function body can be a generator function.
+There is no special syntax for generator functions besides the yield keyword. Any function with the `yield` keyword in the function body can be a generator function.
 
 When the yield keyword is encountered, that function instead returns a generator. This generator has a new [[Function Closures|function closure]] that represents the state of the function
 
@@ -233,7 +224,6 @@ print(gen.next()) !! 5
 
 ## Function/Method Overloading
 
-Lodge doesn't have function or method overloading explicitly as type information could not be used to unambiguously select between functions based on their signature.
-
+Lodge doesn't have function or method overloading explicitly as type information could not be used to unambiguously select between functions based on their signature. This is a limitation of the type system and must be worked around to achieve similar behavior.
 
 The same techniques used for optional parameters can be used to mimic the behavior of function and method overloading. Essentially, the behavior a function can be configured to depend on the types of the given arguments and which arguments are given.

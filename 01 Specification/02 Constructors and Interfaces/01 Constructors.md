@@ -28,7 +28,9 @@ var anonValue := struct() {
 Even though the constructor does not have a defined name, it will still have an internal name and interface like any other class.
 
 ## Constructor Types
-A constructor has the type of a function that takes  the constructor objects and returns the type described by the constructor.
+The objects produced by a constructor have 
+
+The constructor itself has the type of a function that takes  the constructor objects and returns the type described by the constructor.
 
 ## Public/Private Methods and Fields
 
@@ -49,7 +51,7 @@ struct A {
 ```
 
 
-The difference between external and internal class members is that internal members will not be considered as part of the class's interface for the purposes of promising, automatic interfacing, and type union definition.
+The difference between external and internal members is that internal members will not be considered as part of the class's interface for the purposes of promising, automatic interfacing, and type union definition.
 
 Internal members can be accessed from inside the constructor  as they are in scope for all of the constructors methods
 
@@ -88,22 +90,22 @@ When a constructor promises an interface, all public fields and methods are requ
 
 If a constructor promises multiple interfaces containing fields with matching names, the type of that field must be the interface union (type intersection) of the value from all interfaces.
 
-Even if a class/interface is not promised, it will be able to participate in polymorphisms via automatic interfacing as long as it matches the criteria to do so. Promising simply ensures that the programmer is required to satisfy those criteria as well as providing more self-documenting code.
+Even if a class/interface is not promised, it will be able to participate in polymorphism via [[05 Automatic Interfacing|automatic interfacing]] as long as it matches the criteria to do so. Promising simply ensures that the programmer is required to satisfy those criteria as well as providing more self-documenting code.
 
 ``` Lodge
 struct ConstructorName() {
 	promises Interface1, Constructor2
 	
 	!! Constructor Body
-}
+} 
 ```
 
 ## Using
 
-When a constructor uses another constructor, all fields and methods (external and internal) from the super-constructor are implicitly copied into the subclass. Methods created in a class via using satisfy promise requirements.
+When a constructor uses another constructor, all fields, methods, and statements in the constructor being used are implicitly copied into the constructor being defined. Methods and fields created via using satisfy promise requirements.
 
-If two super constructors are promised, they are applied in-order. 
-There's a way to resolve name conflicts, but there is some complexity here: #expand 
+If multiple constructors are promised, they are applied in-order. This may result in name collisions, which cause the use to fail.
+
 
 ``` Lodge
 struct ConstructorName  {
@@ -126,7 +128,7 @@ A<int> a := new A<int>()
 int val := a.field
 ```
 
-When the `<T>` is specified, all instances of the type name `T` found in the class definition will be replaced with whatever the type is at the object creation. `T` could be any identifier, but a single uppercase letter is standard.
+When the `<T>` is specified, all instances of the type name `T` found in the class definition will be replaced with whatever the type is at the object creation. `T` could be any identifier, but a single uppercase letter is standard.33
 
 This is implemented by simply using the broadest possible type union to replace T. If nothing is specified, T is equivalent to the [[03 Built-In Interfaces]]. 
 
@@ -135,11 +137,11 @@ The type of T is known at compile time for a given object, so the return types o
 You can also specify restrictions on the generic types with interfaces or type unions.
 
 ``` Lodge
-class A<Iterable T> {
+struct A<Iterable T> {
 	...
 }
 
-class B<(int | str | list) T> {
+struct B<(int | str | list) T> {
 	...
 }
 ```
@@ -194,17 +196,17 @@ The syntax of the format `fun + Type() ...` is only legal within constructors.
 
 ### Type switching inside operator methods
 
-Because of the way that [[08 Interface Intersection|interface intersection]] works in lodge, it is best to use the broadest possible type for the operator method. These methods are a particularly good use case of the [[05 Variables#Auto Keyword|auto keyword]] as the type of the argument grows automatically as the ways that the variable is used grows.
+It is best to use the broadest possible type for the operator method. These methods are a particularly good use case of the [[05 Variables#Auto Keyword|auto keyword]] as the type of the argument grows automatically as the ways that the variable is used grows.
 
 ### Reverse operator methods
 
-When an operator is acting on two objects, the compiler will first look if the first object implements the operator on the type of the second object. If not, it will look to see if the second object implements the *reverse method* of that operator.
+When an operator acts on two values, the compiler will look in the interface of the first object that can accept the interface of the second object. If it does not, it will look in the second interface for the [[04 Operators#Reverse Operator|reverse operator]] method that can accept the first interface.
 
 For example, take the expression `a / b` for objects of classes `A` and `B`.
 
 If `A` implements `/` for the type of `B`, then that method will be called on `a` with `b` as an argument.
 
-If `A` does *not* implement `/` for the type `B`, then the compiler will check for the `~/` method in `B` on the type of `A`.
+If `A` does *not* implement `/` for the type `B`, then the compiler will check for the `/$` method in `B` on the type of `A`.
 
 The intention being that even if `A` was implemented with no knowledge of `B`, `B` can be implemented such that it is still compatible with `A`, by implementing the reciprocal of the operator.
 
@@ -216,7 +218,6 @@ The intention being that even if `A` was implemented with no knowledge of `B`, `
 * It might be possible to  allow overloading but restrict it to strictly non-intersecting interfaces, which would allow method overloading in some cases.
 		* What happens with None values, which have an empty interface?
 		* This might get frustrating as this intersection behavior would likely be complex and unintuitive
-		* This also makes candidacy for [[08 Interface Intersection|interface intersection]] much more complicated and may not be worth it.
 
 * Instead, the way Lodge is currently designed is to use optional parameters and type switching to achieve similar behavior.
 	* This is similar to Python's behavior and people don't seem to mind that much

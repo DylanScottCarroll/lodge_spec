@@ -1,15 +1,15 @@
+
+
+The interface of a function for the purposes of defining variables is an interface only containing the calling operator method.
 ```
-Int a, Int b1, Str c : 
-Str a, Int b2, Str c : 
-(Int|Str) a, Int _2, Str c
-
-Int a, Int b1, Int b2
-Str a, Int b2, 
-
+!! The syntax doesn't exist for defining this as a generic, but here is an example
+interface function {
+	fun () ReturnType(args ...)
+}
 ```
 
-
-### Type Unions
+## Type Operations on Function Types
+### Type Unions / Interface Intersection
 * The return type is the union of all return types
 
 * Iterate over the functions' shared positional arguments. For each argument:
@@ -40,7 +40,7 @@ Str a, Int b2,
 	* The type is a dictionary
 		* keys are strings
 		* values are the type intersection of the types of the values being captured
-### Type Intersections
+### Type Intersections / Interface Union
 * The return types must all have the exact same interface
 
 * Iterate over the functions' shared positional arguments. For each argument:

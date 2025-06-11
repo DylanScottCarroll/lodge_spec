@@ -1,10 +1,9 @@
 ## Declaring and Assigning Variables
-Lodge variable declarations work much like they do in C or Java. A variable declaration consists of a type followed by a variable name.
+A variable declaration consists of a [[Type Expressions|type expression]], a variable name, and an assignment. Variables cannot be declared without being assigned a value. If a variable may not have a value, consider using a [[04 Errable and Nonable Types#Nonable|nonable]] type.
 
-Assignment occurs using the `:=` operator, which often 
+Assignment occurs using the `:=` operator.
 
 ``` Lodge
-Int value    !! Decalring a variable without defining it
 Int value2 := 10    !! Declaring an int variable and assigning it a value
 ```
 
@@ -27,20 +26,30 @@ var value4 := "hello"    !! Declaring a variable as a string with an inferred ty
 var arr2 := [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]    !! Declaring a type with an inferred type variable
 ```
 
+## Auto Keyword
 
-## Variable Types
-In Lodge, the type of a variable does not restrict the values that can be stored to just the type of the variable. Instead, any value with a [[04 Interface Compatibility|compatible interface]] can be stored in that variable. For example, a variable with the default `Int` type can store any integer value.
+The `auto` keyword allows the programmer define the type of a variable automatically based on what the variable is used to do. When `auto` is used to define a variable, every usage of that variable is analyzed for, gets, sets, and calls. The broadest possible interface for those accesses is used to create the type of the given variable 
 
-``` Lodge
-!! Allowed
-x := i8(-10)
-x := u64(100)
-
-!! Not Allowed
-x := "10"
-x := 10.5
+Consider the following example:
+```
+fun function(auto a) {
+	a.x = 10
+	Float b = a.y
+	Str c = a.function(1, 2, 3) 
+}
 
 ```
+The type of `a` would be the following interface:
+```
+Interface {
+	Int x
+	Float y
+	fun function Str(Int _1, Int _2, Int _3 |)
+}
+```
+
+## Variable Types
+In Lodge, variables types are not defined by the concrete type they are declared with. Instead, the type of a variable is the public interface of that type. This means that a variable is not restricted to just the type it was declared with. Instead, any value with a [[04 Interface Compatibility|compatible interface]] can be stored in that variable. For example, a variable with the default `Int` type can store any integer value.
 
 The full behaviors of Lodge's type checking system is found in [[00 Typing|Chapter 04: Typing]].
 ## Union Types
@@ -52,15 +61,13 @@ Instead of creating a variable with just a single type, it is also possible in L
 !! Allowed
 x := 10
 x := "Hello World"
-
-x := i8(-10)
 ```
 
 Composite types can also be given names with the `as` keyword
 
 ``` Lodge
-(Str | Int) as Strint
-Strint x = "10"
+(Str | Int) as StrInt
+StrInt x = "10"
 ```
 
 ## Auto Keyword
@@ -85,20 +92,6 @@ Interface InterfaceName{
 	fun takeAction Float(Int)
 }
 ```
-
-## Literals
-## Numerical Literals
-
-* numerical literals
-	* `10`, `1.5`, `.5`, `0xFF`, `0b1010`, etc.
-* string literals
-	* "Text inside quotations"
-* operators
-	* `+`, `-`, `*`, `/`, etc.
-* keywords
-	* Like `if`, `loop`, `class`, `fun`, etc.
-* identifiers
-	* Like the names of variables, types, classes, etc.
 
 
 ## Circular Type Definitions

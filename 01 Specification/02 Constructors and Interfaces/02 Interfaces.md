@@ -12,8 +12,8 @@ There are several ways that interfaces are created in Lodge
 	* Using the [[02 Interfaces#Interface Definition|interface definition syntax]] 
 2. Implicitly by creating a constructor
 	* Every constructor definition will also create an interface of the same name out of that constructor's public members.
-3. Using a [[03 Type Unions|type union]] to combine existing interfaces through [[08 Interface Intersection|interface intersection]]
-4. Using a [[06 Type Intersections|type intersection]] to combine existing interfaces through [[09 Interface Union|interface unions]]
+3. Using a [[03 Type Unions|type union]] to combine existing interfaces into a [[10 Interface Set|interface set]].
+4. Using a [[06 Type Intersections|type intersection]] to combine existing interfaces [[10 Interface Set|interface set]].
 
 
 Behind the scenes, the members that can make up an interface are getters, setters, and methods. This is distinct from how a programmer defines an interface or class, but the separation between getters and setters fields is important for interface intersection, type unions, and properties.
@@ -35,6 +35,13 @@ interface InterfaceName {
 	get Int propertyName
 	set Int propertyName
 }
+​￼￼￼Generic Interface
+￼￼￼
+​￼interface A<T> {
+	T fieldName 
+}
+
+￼￼
 
 ```
 
