@@ -70,29 +70,6 @@ Composite types can also be given names with the `as` keyword
 StrInt x = "10"
 ```
 
-## Auto Keyword
-
-Since variables in lodge are defined entirely based on interface compatibility than particular concrete types, it is possible to automatically declare a variable whose type interface is defined by what members are ac
-
-The auto keyword will look at the entire scope that it's variable is being bound in to see what members of that variable's interface are being accessed. That then becomes the interface of that variable.
-
-
-Take this example:
-```
-fun functionName ReturnType(auto arg) {
-	arg.name = "Name"
-	Float result = arg.takeAction(10)
-}
-```
-
-For this function the `arg` variable will have approximately the following interface:
-```
-Interface InterfaceName{
-	Str name
-	fun takeAction Float(Int)
-}
-```
-
 
 ## Circular Type Definitions
 
@@ -101,7 +78,7 @@ There may be cases where a composite type declaration may want to refer to itsel
 
 Here's an example of how a tuple containing two values can be used to create something akin to a linked list
 ``` Lodge 
-(int, listelement)|None as listElement
+((int, listelement) | None) as listElement
 
 listElement list = (0 (1, (2, (3, None))))
 ```
