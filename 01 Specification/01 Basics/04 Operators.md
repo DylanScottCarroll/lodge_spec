@@ -21,7 +21,7 @@ The operators here that are words are reserved keywords
 | ^    | exclusive or                    |
 | ==   | value equivalence               |
 | is   | identity equivalence            |
-| !=   | not value equivalent            |
+| !=   | not value equivalent            |Revise
 | isnt | not identity equivalent         |
 | >    | greater than                    |
 | <    | less than                       |
@@ -71,18 +71,18 @@ Using the ~ symbol after an operator indicates that the operation should be broa
 This can be used to expand mathematical operations
 ```
 var list = [0:10]
-var powers_of_two = 2 ~** list
+var powers_of_two = 2 **~ list
 ```
 
 Function calls can also be broadcast
 ```
-[Float] values = ( [:314] ~/ 100 )
+[Float] values = ( [:314] /~ 100 )
 [Float] mapped_values = cos~(values) !!This applys the cosine function to every value in values
 ```
 
 You can also broadcast generator objects, which will be evaluated lazily
 ``` Lodge
-<Int> everySquare = <:> ~** 2 
+<Int> everySquare = <:> **~ 2 
 ```
 
 Broadcast operators have the same precedence of the non-broadcast version
@@ -92,6 +92,8 @@ When any operator is followed by a dollar sign, it simply applies the
 
 ```
 10 :=$ variable
+
+denominator /$ numerator
 ```
 
 
@@ -100,13 +102,13 @@ The type conversion operator `->` is the way to convert an object of one type in
 
 It is particularly useful for conversion into strings for representational purposes:
 ``` Lodge
-Str myStrRepr := myObj->str
+Str myStrRepr := myObj->Str
 ```
 
 
 Or for conversions between numerical types
 ``` Lodge
-Int myInt := myFloat->int
+Int myInt := myFloat->Int
 ```
 
 ## Error Resolution Operator
@@ -128,7 +130,7 @@ fun function() Int! {
 Which is equivalent to:
 
 ``` Lodge
-fun function() (Err | Int) {
+fun function() (Int | Err) {
 	(Err | Int) val := errableFunction()
 	return swype val {
 		Err : { Err }
@@ -140,13 +142,13 @@ fun function() (Err | Int) {
 Sometimes, instead of passing up the error, it is better simply to have a default value in case of an error. For these cases, the error resolution operator can also be used as a binary operator.
 
 ``` Lodge
-fun function() !Err {
+fun function() Err! {
 	Int val := errableFunction() ! -1
 } 
 ```
 Is equivalent to
 ``` Lodge
-fun function() !Int {
+fun function() Int! {
 	!Int result = errableFunction()
 	Int val := swype result {
 		Err : { -1 }
@@ -178,7 +180,7 @@ The None resolution operator applies to variables whose type is a union that con
 
 The following two code blocks are equivalent:
 ```
-?Int temp = nonableFunction()
+Int? temp = nonableFunction()
 
 Int variable = swype variable {
 	None : { -1 }
