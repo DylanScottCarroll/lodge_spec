@@ -19,7 +19,7 @@ A while loop takes a boolean expression and will repeat its body code until the 
 ``` Lodge
 !! Print all the values on the stack
 loop not stack.is_empty() {
-	ints val := stack.pop()
+	ints val = stack.pop()
 	print(val)
 }
 ```
@@ -30,13 +30,13 @@ The for-loop works like Python's for-loop or for-each loops in other languages. 
 
 ``` Lodge
 !! Print all of the characters in the list
-loop for c := char_list
+loop for c = char_list
 	print(c)
 ```
 
 You can specify a generator expression in the head of a loop without `<>`
 ```
-loop for i := 1:10 {
+loop for i = 1:10 {
 	print(i)
 }
 ```
@@ -44,7 +44,7 @@ loop for i := 1:10 {
 If you want to loop over multiple iterators of the same length at once, you can separate several associations with a comma as below.
 
 ``` Lodge
-loop for a, b := list1, list2 {
+loop for a, b = list1, list2 {
 
 	list3.append(a + b)
 }
@@ -54,7 +54,7 @@ loop for a, b := list1, list2 {
 You can also add an option that will keep track of the index with the `at` keyword.
 ``` Lodge
 !! Print all of the characters in the list
-loop for c, i := char_list, 0: {
+loop for c, i = char_list, <0:> {
 	print(c)
 }
 ```
@@ -71,18 +71,18 @@ Lodge also has the ` break if ` and ` continue if ` statements which act as cond
 
 For example, these two code blocks behave the same:
 ``` Lodge
-loop for value := value_list {
-	print(value)
-	
+loop for value = value_list {
 	break if value == None
+	
+	print(value)
 }
 
-loop for value := value_list {
-	print(value)
-
+loop for value = value_list {
 	if value == None {
 		break
 	}
+
+	print(value)
 }
 ```
 
