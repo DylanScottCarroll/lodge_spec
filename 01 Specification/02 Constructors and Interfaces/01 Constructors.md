@@ -28,9 +28,9 @@ var anonValue := struct() {
 Even though the constructor does not have a defined name, it will still have an internal name and interface like any other class.
 
 ## Constructor Types
-The objects produced by a constructor have 
+The objects produced by a constructor have an interface consisting of the variable names and types in the scope of the constructor.
 
-The constructor itself has the type of a function that takes  the constructor objects and returns the type described by the constructor.
+The constructor itself has the type of a function that takes the constructor objects and returns the type described by the constructor. 
 
 ## Public/Private Methods and Fields
 
@@ -44,19 +44,20 @@ struct A {
 	}
 	
 	fun _F Int(Int) {
-		!! Internal functions
+		!! Private functions
 	}
 	
 }
 ```
 
 
-The difference between external and internal members is that internal members will not be considered as part of the class's interface for the purposes of promising, automatic interfacing, and type union definition.
+The difference between public and private members is that internal members will not be considered as part of the class's interface for the purposes of promising, automatic interfacing, and type union definition.
 
-Internal members can be accessed from inside the constructor  as they are in scope for all of the constructors methods
+Private members can be accessed from inside the constructor as they are in scope for all of the constructors methods
 
 
 ## Properties
+Note: properties are likely to be removed from scope to optimize field access from objects. Otherwise, field access would always be as slow as a function call.
 
 Defining properties is done using the get and set keywords. Inside the body of a setter, the provided value can be referenced by the name of the setter.
 
@@ -104,7 +105,7 @@ struct ConstructorName() {
 
 When a constructor uses another constructor, all fields, methods, and statements in the constructor being used are implicitly copied into the constructor being defined. Methods and fields created via using satisfy promise requirements.
 
-If multiple constructors are promised, they are applied in-order. This may result in name collisions, which cause the use to fail.
+If multiple constructors are used, they are applied in-order. In the case of name-collisions, the later with the name will overwrite the earlier. 
 
 
 ``` Lodge
@@ -193,6 +194,7 @@ A var3 := var1 + var2
 ```
 
 The syntax of the format `fun + Type() ...` is only legal within constructors.
+(Or is it!? I may end up allowing this syntax at a module-level which would allow one to apply operators to modules. Wouldn't that be wild)
 
 ### Type switching inside operator methods
 
@@ -211,11 +213,11 @@ If `A` does *not* implement `/` for the type `B`, then the compiler will check f
 The intention being that even if `A` was implemented with no knowledge of `B`, `B` can be implemented such that it is still compatible with `A`, by implementing the reciprocal of the operator.
 
 
-## Method Overloading
-* Lodge does not have function overloading in the typical sense currently
+## Dynamic Function Dispatch
+* Lodge does not have dynamic dispatch in the typical sense currently
 * Type unions and automatic interfacing make it less clear which concrete types correspond to which function.
 
-* It might be possible to  allow overloading but restrict it to strictly non-intersecting interfaces, which would allow method overloading in some cases.
+* It might be possible to  allow dynamic dispatch but restrict it to strictly non-intersecting interfaces, which would allow method overloading in some cases.
 		* What happens with None values, which have an empty interface?
 		* This might get frustrating as this intersection behavior would likely be complex and unintuitive
 
