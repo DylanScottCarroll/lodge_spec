@@ -11,7 +11,7 @@ with mutext_lock {
 
 You can also place an assignment in the statement. 
 ```
-with file_handle := open("filname".txt) {
+with file_handle = open("filname".txt) {
 
 }
 ```
