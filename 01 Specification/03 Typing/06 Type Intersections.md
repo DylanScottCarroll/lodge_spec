@@ -9,5 +9,5 @@ Thus, Lodge code is able to be fully agnostic to the concrete type of an object 
 
 
 
-## I## The Interface of a Type Union
+## The Interface of a Type Union
 The interface of a type union is represented by the [[08 Interface Union|interface union]] of all participating interfaces.
