@@ -84,8 +84,6 @@ f(*, 2) !! case 3
 f(1, 2) !! case 4 
 ```
 
-The order does not matter and optional 
-
 ### Providing Arguments by Keyword
 By default, arguments can only be provided positionally.  If, however, one of the comma delimiters is replaced by `|` all following arguments will be keyword-only arguments. 
 
@@ -153,9 +151,9 @@ fun func2(Int a, Str b, Int? c=None, [Int d]) {
 
 !! Expanding arrays
 [int] list := [1, 2, 3]
-func1(list...) !! Type error because the number of arguments may not match for another value of list
-func2(1, "2", list...) !! Success as the excess length of 
-func2(*list) !! type error because the second argument type does not match 
+func1(list...) !! Type error because the number of arguments may not match if list had a different value.
+func2(1, "2", list...) !! Success as the excess length of the list can be caputed by the sequence capturing arugment, d.
+func2(*list) !! type error because the second argument type does not match
 
 !! Expanding a tuple with heterogenous types 
 (Int, Str, Int) tuple := (1, "2", 3) 
