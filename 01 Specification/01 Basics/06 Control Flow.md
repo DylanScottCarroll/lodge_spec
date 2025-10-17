@@ -18,12 +18,19 @@ Naked blocks can also be created without an opening statement simply to create a
 ### Block Expressions
 If a block is placed in a location where it is evaluated as an expression rather than a standalone statement, the last statement of a block is treated as an expression that the entire block evaluates to.
 
-For naked blocks, this can simply be used as a way to cluster a sequence of statements into a single unit that returns a value. It has essentially no impact on the way the code executes, but may be used for conceptual groupings of actions.
+### Naked Blocks
+Blocks without any keyword, also known as naked blocks, can simply be used as a way to cluster a sequence of statements into a single unit that returns a value. It has essentially no impact on the way the code executes, but may be used for conceptual groupings of actions.
 
-When an if statement is used as an expression, evaluating blocks can be used for constructs like ternaries.
+``` Lodge
+# naked blocks
+Int x = {
+	Int a = 200
+	Int b = 10
+    a / b
+}
 
-When a loop is used in an assignment, each iteration of the loop is evaluated separately, and placed into a list that returns when the loop completes. 
-
+!! x == 20
+```
 
 ## Conditionals
 
