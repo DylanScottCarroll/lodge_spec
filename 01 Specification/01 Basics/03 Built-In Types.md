@@ -91,8 +91,8 @@ var list2 := [0, 1, 2, 3, 4]
 
 
 ## Set
-* literal: `{value1, value2, value3}`
-* type definition: `{Type}`
+* literal: `{|value1, value2, value3|}`
+* type definition: `{|Type|}`
 * Implemented as a hash set
 
 ``` Lodge
