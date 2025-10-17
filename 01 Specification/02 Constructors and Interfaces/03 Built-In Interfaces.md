@@ -1,6 +1,3 @@
-The broadest possible interface. Every single object in lodge can be placed inside of a variable defined as object.
-
-
 ## Type Interfaces
 Every concrete type in Lodge automatically has an associated interface.
 
