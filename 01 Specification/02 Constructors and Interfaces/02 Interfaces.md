@@ -35,14 +35,6 @@ interface InterfaceName {
 	get Int propertyName
 	set Int propertyName
 }
-​￼￼￼Generic Interface
-￼￼￼
-​￼interface A<T> {
-	T fieldName 
-}
-
-￼￼
-
 ```
 
 
