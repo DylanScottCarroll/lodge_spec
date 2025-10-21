@@ -105,7 +105,16 @@ functionName(1, z=3) !! Keyword argument 7 not provided
 functionName(x=2, y=2, z=3) !! Positional argument x not provided and Unexpected keyword argument x
 ```
 
+If there is a variable in scope when the function is called that matches one of the keyword arguments, there is a shorthand for providing that variable to that keyword argument without needing to repeat the keyword
 
+```
+fun foo(Int longVariableName = 10) { }
+Int longVariableName = 20
+
+!! The following are equivalent
+foo(longVariableName = longVariableName)
+foo(=longVariableName)
+```
 ## Allowing Extra Arguments
 
 ### Capturing Extra Positional Arguments
@@ -164,8 +173,8 @@ func2(tuple...)
 func1(arr2..., 3)
 ```
 
-### Dictionary Expansion
-It is also possible to do perform similar action with keyword arguments using the `...` suffix. Arguments provided this way much be optional as the contents of the dictionary cannot be verified at compile time.
+### Map Expansion
+It is also possible to do perform similar action with keyword arguments using the `...` suffix. Arguments provided this way much be optional as the contents of the map cannot be verified at compile time.
 With this, it is possible to supply the same argument multiple times. When that is the case, the latest provided value will be the final value of the argument. 
 
 ```
@@ -177,7 +186,7 @@ fun func1(Int? a=None, {|Int kwargs|}){
 	!! ...
 }
 
-{Str:Int} dict = {"a" : 1, "b": 2, "c":3}
+{> Str:Int} map = {"a" : 1, "b": 2, "c":3}
 
 func1(dict...) !! a=1, b=2, c=3
 

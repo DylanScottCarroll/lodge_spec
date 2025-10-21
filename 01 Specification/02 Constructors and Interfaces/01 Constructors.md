@@ -20,7 +20,7 @@ Constructors can also be created without names in order to allow the creation of
 The anonymous values will participate in the typing system as normal, and can even be placed in other variables using the `var` keyword.
 
 ``` Lodge
-var anonValue := struct() {
+var anonValue := struct {
 	!! Value body
 }()
 ```
@@ -30,7 +30,7 @@ Even though the constructor does not have a defined name, it will still have an 
 ## Constructor Types
 The objects produced by a constructor have an interface consisting of the variable names and types in the scope of the constructor.
 
-The constructor itself has the type of a function that takes the constructor objects and returns the type described by the constructor. 
+The constructor itself has the type of a function that takes  the constructor arguments and returns the type described by the constructor.
 
 ## Public/Private Methods and Fields
 
@@ -148,7 +148,7 @@ struct B<(int | str | list) T> {
 ```
 
 
-## Generics vs Unions
+### Generics vs Unions
 There is a small, yet important difference between creating non-generic class whose member types are a type union vs creating a generic class whose generic type is that same type union. 
 The difference arises from the binding  time of the type. 
 With the generic, the single allowed type is specified at value creation, whereas the type union allows all the types in the union forever. This difference is demonstrated by the following example.
@@ -182,7 +182,7 @@ b2.field := "string"
 ## Operator Methods
 
 ``` Lodge
-class A {
+struct A {
 	fun + Int(auto other) {
 		!! Logic for adding objects
 	}
@@ -193,8 +193,22 @@ A var2 := A()
 A var3 := var1 + var2
 ```
 
-The syntax of the format `fun + Type() ...` is only legal within constructors.
-(Or is it!? I may end up allowing this syntax at a module-level which would allow one to apply operators to modules. Wouldn't that be wild)
+The syntax of the format `fun operator Type() ...` is only legal within constructors.
+
+There is also special syntax  for the index operator `[]` to distinguish between getting and setting values
+```
+struct A {
+	fun [get] Int(Int index){
+		!! Value retrieving logic
+	}
+	
+	fun [set] (Int index, Int value){
+		!! Value assigning logic
+	}
+
+}
+
+```
 
 ### Type switching inside operator methods
 

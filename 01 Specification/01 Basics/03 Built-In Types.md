@@ -1,24 +1,20 @@
-## Int
+# Basic Types
+## Integer
+value type
+<u>Int</u>
+* Defaults to 64 bit integer value
+* Interface does not allow float values
+
+## Floating Point
 value type
 
-| size | signed | Unsigned |
-| :--- | :----- | :------- |
-| 8    | `I8`   | `U8`     |
-| 16   | `I16`  | `U16`    |
-| 32   | `I32`  | `U32`    |
-| 64   | `I64`  | `U64`    |
-
-## Float
-value type
-
-| size | name  |     |
-| :--- | :---- | --- |
-| 32   | `F32` |     |
-| 64   | `F64` |     |
-
+<u>Float</u>
+* Defaults to 64 bit floating point value
+* Interface also allows Int values
 ## Booleans
 value type
-**Bool**
+<u>Bool</u>
+
 
 ## Strings
 reference type
@@ -36,18 +32,22 @@ Str aString := "A new string literal"
 value type
 
 The concrete type of the none constructor is a singleton
-
-The None type has a totally empty interface. 
+The None type has the special property of being compatible with no interface besides None, having no other interface be compatible with it besides None.
 
 Uses
 * Indicate that something does not exist in cases where using null doesn't make sense.
 * When a variable has a None in its union, the interface is empty and you would need to check that the value is not None in a [[05 Type Switching|type switch]] before you could do any operations with it.
-* If that variable is always initialized to None, it could eliminate the chance of null pointer exceptions by forcing the None value check.
+* If variables don't have an initial value, setting the value to None is the only option, forcing a check.
 * Used as a default value for function arguments when that argument doesn't always need to be present. This is useful for [[08 Functions#Variadic Functions|variatic functions and optional parameters]].
 
 
+## Data
+value type
+This circumvents the typical type system as Data values are the only values that don't exist in a [[Lodge Thing|thing]]. Because of this, Data variables can only contain data values and data values can only be placed into Data variables.
+#expand
 
-## Data Structure Types
+
+# Data Structure Types
 All data structure types are reference types
 
 
@@ -67,6 +67,12 @@ All data structure types are reference types
 ```
 
 
+The interface for a particular tuple type contains fields for each of its elements:
+- tuple.item0
+- tuple.item1
+- ...
+- tuple.itemN 
+
 ## List
 * literal: `[value1, value2, value3]`
 * type definition: `[Type]`
@@ -80,23 +86,23 @@ var list2 := [0, 1, 2, 3, 4]
 
 
 ## Map
-* literal: `{| key1 : value1, key2 : value2 |}`
-* type definition: `{|Type1 : Type2|}`
+* literal: `{> key1 : value1, key2 : value2 }`
+* type definition: `{> Type1 : Type2}`
 * Mutable reference type
 * Implemented as a hash table
 
 ```
-{|Str : Int|} aDictionaty := {| "A" : 1, "B" : 20|}
+{> Str : Int} map1 := {> "A" : 1, "B" : 20 }
 ```
 
 
 ## Set
-* literal: `{|value1, value2, value3|}`
-* type definition: `{|Type|}`
+* literal: `{$ value1, value2, value3}`
+* type definition: `{$ Type}`
 * Implemented as a hash set
 
 ``` Lodge
-{|Int|} set1 = {| ~2, 4, 6, 8 |}
+{Int} set1 = {$ ~2, 4, 6, 8 }
 ```
 
 
@@ -116,4 +122,4 @@ The thing contains a field for the value and a field for type information.
 
 For value types, the value field is the value itself, but for reference types the value is a reference to the object in memory. 
 
-For smaller value types like `I8`s, there are wasted bytes in the high end of the value portion of the thing. To combat this, some types such as arrays may be implemented in such a way as to store raw values rather than things when the type is restricted to that of a value type. 
+For smaller value types like bools and bytes, there are wasted bytes in the high end of the value portion of the thing. 

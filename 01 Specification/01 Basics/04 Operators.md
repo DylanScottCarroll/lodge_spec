@@ -88,11 +88,9 @@ You can also broadcast generator objects, which will be evaluated lazily
 Broadcast operators have the same precedence of the non-broadcast version
 
 ## Reverse Operator 
-When any operator is followed by a dollar sign, it simply applies the 
+When any operator is followed by a dollar sign, it simply applies the reverse of the given operator
 
-```
-10 :=$ variable
-
+``` Lodge
 denominator /$ numerator
 ```
 
@@ -111,6 +109,7 @@ Or for conversions between numerical types
 Int myInt := myFloat->Int
 ```
 
+The type conversion operator is special because the right hand side is parsed as a [[Type Expressions|type expression]] rather than a normal expression
 ## Error Resolution Operator
 Shorthand for resolving errors
 
@@ -178,7 +177,7 @@ fun errableFunction() Str! {
 ## None Resolution Operator
 The None resolution operator applies to variables whose type is a union that contains None. It is essentially a shorthand for an otherwise common type switch.
 
-The following two code blocks are equivalent:
+The following two code snippets are equivalent:
 ```
 Int? temp = nonableFunction()
 
@@ -199,55 +198,70 @@ Unlike the error resolution operator, there is no unary version of the None reso
 `|^&+-*/%`
 
 ```
-!! Assignment
+!! Assignment : ass_expr
+:=  +:=  -:=  *:=  /:=  //:=  ...
 
-:=  +=  -=  *=  /=  //=  ...
+!! Special Infix operators : special_in_expr
+!  ?
+
+
+!! Special Postfix Operators : special_post_expr
+!
 
 !! Logical
 
-| 
-^
-&
+!! or_expr
+|  |!
+!! xor_expr
+^  ^!
+!! and_expr
+&  &!
 
+!! com_expr
 ==  !=  is  isnt  <  >  >= <=
 
+!! not_expr
 not
 
 !! Numerical
 
+!! bor_expr
 ||
+!! bxor_expr
 ^^
+!! band_expr
 && 
+!! bshift_expr
 >>  <<
 
-!! a_exp
+!! a_expr
 + -
 
-!! m_exp
+!! m_expr
 *  /  //   %
 
 
-!! Unary prefix
+!! Unary prefix : pre_expr
 -  -|  
 
-!! Power Operator
+!! Power Operator : pow_expr 
 **
 
-!! Increment operators (postfix)
+!! Increment operators (postfix) : inc_expr
 ++ -- 
 
 
-!! Special Infix operators
-!  ?
-
-
 !! Special Postfix Operators
-!
+!! call_expr
+() 
 
-!! Special Postfix Operators
-()  []   -> 
+!! index_expr
+[]
 
+!! cast_expr
+-> 
 
+!! access_expr
 .
 
 ```

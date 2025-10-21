@@ -24,7 +24,9 @@ return
 struct
 promises
 uses
+allocate
 get
 set
 
 import
+include

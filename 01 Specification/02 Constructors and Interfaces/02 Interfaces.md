@@ -20,6 +20,13 @@ Behind the scenes, the members that can make up an interface are getters, setter
 
 When a constructor or interface definition specifies a public field, both a getter and setter will be created of that type in the interface. When either a getter or a setter is specified, only that getter or setter is created in the interface. Getters and setters of a given name can have the same or different types. That means that, in an interface definition, getters and setters of the same type will have the same result as a field definition. Fields and properties are identical for both external access and interface satisfaction (assuming the getter and setters have the same type). 
 
+## The Namespace of Interfaces
+
+It is possible to create an interface in a given scope even if another (non-interface) name already exists in that scope. This happens every time a struct is defined, as the struct definition creates the callable constructor itself as well as an interface of the same name. 
+
+Interface values are only referenceable inside of a [[Type Expressions|type expression]], and other values are typically only referencable inside normal expressions.
+
+
 ## Interface Definition Syntax
 
 The syntax for defining an interface is similar to the  [[01 Constructors#Constructor Syntax|constructor definition syntax]], but without any values,  method/property implementations, or private members.
@@ -30,13 +37,12 @@ Here is an example:
 interface InterfaceName {
 	Int fieldName
 
-	fun FunctionName Int(Int arg1, Str arg2)
+	fun functionName Int(Int arg1, Str arg2)
 
 	get Int propertyName
 	set Int propertyName
 }
 ```
-
 
 ## Generic Interface
 ```
