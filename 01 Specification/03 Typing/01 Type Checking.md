@@ -1,1 +1,0 @@
-Lodge is a semi-dynamically typed language, where all type checks occur statically at compile time and that no operation can cause a type error at runtime. However, in comparison to fully statically typed languages, Lodge's type system allows more type flexibility and automatic typing.
