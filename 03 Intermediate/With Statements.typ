@@ -1,5 +1,7 @@
 #import "../shared.typ": *
 
+#expand
+
 With statements let the programmer automatically manage resources that need to be explicitly opened and closed using a block in which the resource
 
 Any object that satisfies the  #section-link("03 Built-In Interfaces", "ContextManager", "ContextManager interface") can be placed in argument of a with statement.

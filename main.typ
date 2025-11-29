@@ -39,7 +39,7 @@
   #underline[#it]
 ]
 
-#show heading.where(level:5): it => [
+#show heading.where(level:4): it => [
   #set text(size: 12pt, weight: "semibold")
   #it
 ]
@@ -149,14 +149,16 @@
 
 
 
-
 = The Type System
+
+== The Lodge Type Checker
+#include "02 Typing/Type Checking.typ"
 
 == Interface Compatibility
 #include "02 Typing/Interface Compatibility.typ"
 
-== The Lodge Type Checker
-#include "02 Typing/Type Checking.typ"
+== Function Interfaces
+#include "02 Typing/Interface of a Function.typ"
 
 == Type Set Operations
 #include "02 Typing/Type Set Operations.typ"
@@ -183,8 +185,8 @@
 == Type Switching
 #include "02 Typing/Type Switching.typ"
 
-== Formalization
-#include "02 Typing/Formalization.typ"
+// == Formalization
+// #include "02 Typing/Formalization.typ"
 
 
 

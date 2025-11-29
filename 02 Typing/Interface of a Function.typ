@@ -1,71 +1,87 @@
 #import "../shared.typ": *
 
-The interface of a function for the purposes of defining variables is an interface only containing the calling operator method.
-```
-!! The syntax doesn't exist for defining this as a generic, but here is an example
-interface function {
-	fun () ReturnType(args ...)
-}
-```
 
-=== Type Operations on Function Types
-==== Type Unions / Interface Intersection
-- The return type is the union of all return types
+The interface of a function consists of its signature: arguments and return types.
 
-- Iterate over the functions' shared positional arguments. For each argument:
-	- Names are ignored
-	- The type is the type intersection of all the types
-	- If at least one is required, the resulting argument is required
-- If one function has more arguments than another
-	- If any of the following arguments are required
-		- The functions with fewer arguments must have a positional capture compatible with all required extra arguments, otherwise reject
-	- These arguments don't make it into the new signature
-		- Unless the functions missing it have compatible positional captures
-	
-- For each keyword argument in all signatures
-	- If the argument is not in all signatures
-		- If any argument is required
-			- Functions missing this argument must have a keyword capture compatible with it, otherwise reject
-		- These arguments don't make it into the new signature
-			- Unless the functions missing it have compatible keyword captures
-	- The type is the intersection of all the types 
-	- If at least one is required, the argument is required
+The return type is simple and follows the rules of covariance. The argument types follow contravatince, but the rules are more complex given the existence, of optional arguments, keyword arguments, and argument captures.
 
-- Positional captures
-	- The name is ignored
-	- The type is a list of the type intersection of the types of the values being captured
+The names of positional arguments in a function signature do not make it into the interface, but those of keyword arguments do. Each keyword and positional argument is marked as either optional or required. 
 
-- Keyword captures captures
-	- The name is ignored
-	- The type is a dictionary
-		- keys are strings
-		- values are the type intersection of the types of the values being captured
-==== Type Intersections / Interface Union
-- The return types must all have the exact same interface
 
-- Iterate over the functions' shared positional arguments. For each argument:
-	- Names are ignored
-	- The optionality of all corresponding positional arguments must match, otherwise reject
-	- The type is the type union of all the types
-- If one function has more arguments than another
-	- Reject unless the functions missing it have a compatible positional capture
-	- They must all be optional, otherwise reject
-	
-- For each keyword argument in all signatures
-	- If the argument is not in all signatures
-		- Reject unless the functions missing it have a compatible keyword capture
-		- They must all be optional, otherwise reject
-	- The optionality of all corresponding keyword arguments must match, otherwise reject
-	- The type is the union of all the types 
+=== Function Compatibility
+For functions, both covariance and contravariance apply; the return types are covariant, and the argument types are contravariant. 
 
-- Positional captures
-	- The name is ignored
-	- If one has a positional capture, they both must, otherwise reject
-	- The type is a list of the type union of the types of the values being captured
+Let's consider a function called B checking compatibility with function A
 
-- Keyword captures captures
-	- The name is ignored
-	- If one has a keyword capture, they both must, otherwise reject
-	- The type is a dictionary
-		- keys are strings
-		- values are the type union of the types of the values being captured
+==== Return Type
+The return type of B must be compatible with the return type of A.
+
+==== Positional Arguments
+B must have at least as many positional arguments as A. If B has more positional arguments than A, the extra must be optional.\
+
+Contravariance: Positional arguments in A must be compatible with corresponding (same position) positional arguments in B.
+
+==== Keyword Arguments
+B's set of keyword arguments must be the superset of A's. B's keyword arguments that aren't in A must be optional.
+
+Contravariance: Keyword arguments in A must be compatible with corresponding (same name) arguments in B.
+
+==== Argument Captures
+If A has a positional capture, B must have a positional capture with a compatible type. If A has a keyword capture, B must have a keyword capture with a compatible type
+
+
+=== Non-Callable Function Interfaces
+There are cases in which applying a type operation to a functional interface results in an argument list that is not valid for any of the participating functions. In this case, the function cannot be callable as there are no set of arguments that would be type safe. In this case, the function interface is marked as non-callable. In order to call the function, it must first be passed through a type switch to reveal a signature that is callable.
+
+Non-callable function interfaces allow participation by functions even if the interface is missing mandatory arguments of the participating function.
+
+
+=== Type Unions / Interface Intersection
+==== Return Type
+
+For a type union (which corresponds to an interface intersection), the resulting return type is simply the type union of the return types of all participating functions.
+
+==== Positional Arguments
+
+For positional arguments, only arguments that appear in all participating signatures are considered. The names of these positional arguments are ignored. For each shared position, the resulting argument’s type is the type intersection of all corresponding argument types. If any participating function marks that argument as required, the resulting argument is also required.
+
+When some functions have additional positional arguments beyond those shared among all signatures, those additional arguments are not included in the resulting interface unless every function missing them provides a positional capture compatible with the extra arguments. If any of those extra arguments are required, the resulting function interface becomes non-callable.
+
+==== Keyword Arguments
+
+For keyword arguments, the intersection is taken over all keyword names appearing in any of the participating signatures. A keyword argument only appears in the resulting interface if it appears in all signatures, unless the signatures missing it have keyword captures compatible with that argument. If a participating function marks a keyword argument as required, then any function missing that keyword must have a keyword capture compatible with the required argument. Otherwise the resulting interface becomes non-callable.
+
+When a keyword argument does appear in all signatures or can be captured, its resulting type is the type intersection of all corresponding argument types, and it is marked as required if any participating signature marks it as required.
+
+==== Positional Capture
+
+If positional captures exist, the resulting interface includes a positional capture with the type of the type intersection of all captures in the participating functions.
+
+==== Keyword Capture
+
+If keyword captures exist, the resulting interface includes a keyword capture wit hthe type of the intersection of all captures in the participating functions.
+
+=== Type Intersections / Interface Union
+==== Return Type
+
+For a type intersection (which corresponds to an interface union), the resulting return type is the type intersection of the return types of all participating functions.
+
+==== Positional Arguments
+
+For each positional argument shared across all signatures, the names are ignored, and all corresponding arguments must agree on optionality. If their optionalities differ, the resulting interface becomes non-callable. The resulting type is the type union of the argument types in that position.
+
+If some signatures contain additional positional arguments not present in others, the resulting interface is non-callable unless every signature missing those arguments provides a positional capture compatible with them. Furthermore, all such extra arguments must be optional; if any are required, the interface is non-callable.
+
+==== Keyword Arguments
+
+A keyword argument appears in the resulting interface only if it is present in all participating signatures or if the signatures missing it have keyword captures compatible with it. As with positional arguments, all corresponding keyword arguments must agree on optionality; if they do not, the interface is rejected. When the argument is valid for inclusion, its resulting type is the type union of all participating argument types.
+
+If the argument is required in some signatures but optional in others, this mismatch results in a non-callable interface unless the rules above for captures apply.
+
+==== Positional Capture
+
+For positional captures, the resulting interface includes one only if every participating signature includes a positional capture; otherwise, the interface is non-callable. The capture’s type is a list whose element type is the type union of all captured element types.
+
+==== Keyword Capture
+
+For keyword captures, the resulting interface includes a keyword capture only if all signatures include one; otherwise, the interface is non-callable. Its type is a dictionary mapping strings to value types, where each value type is the type union of the corresponding captured types.

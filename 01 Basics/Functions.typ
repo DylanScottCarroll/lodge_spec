@@ -3,23 +3,29 @@
 
 === Basic Syntax
 
-Full function definitions are made of the following pieces: 1) The  `fun` keyword, 2) the function name, 3) optional type parameters surrounded by angle brackets, 4) optionally, the return type, 5) the argument description list surrounded by parentheses, and 6) the function body consisting of a sequence of statements surrounded with curly brackets. This syntax defines a variable with the function's name in the current scope and evaluates as an expression to that function.
+Full function definitions are made of the following pieces: 1) The  `fun` keyword, 2) the function name, 3) optional type parameters surrounded by angle brackets, 4) optional return type, 5) the argument description list surrounded by parentheses, and 6) the function body consisting of a sequence of statements surrounded with curly brackets. This syntax defines a variable with the function's name in the current scope and evaluates as an expression to that function.
 
 
 ```Lodge
-!! Functions without return types may omit it, 
-fun functionName(Type1 arg1, Type2 arg2, Type3 arg3) {
+!! Full Syntax
+fun functionName <Type T, Type T, ...> ReturnType(Type1 arg1, Type2 arg2, Type3 arg3) {
 	!! Function body	
 }
 
+!! Type parameters are optional and are usually omitted
 fun functionName ReturnType(Type1 arg1, Type2 arg2, Type3 arg3) {
+	!! Function body	
+}
+
+!! Functions without return types may omit it, 
+fun functionName(Type1 arg1, Type2 arg2, Type3 arg3) {
 	!! Function body	
 }
 
 ```
 
 
-Alternatively, Lodge offers syntactic shorthand for defining anonymous functions. This form consists only of the function arguments surrounded with parentheses, the `=>` token, and the function body surrounded by curly brackets. This syntax does not declare a variable for the function. 
+Alternatively, Lodge offers syntactic shorthand for defining anonymous functions. This form consists only of an argument list, the `=>` token, and the function body surrounded by curly brackets. This syntax does not declare a variable for the function. 
 ```
 (Type arg, Type arg, ...)=>{ !- Function body -! }
 ```
@@ -153,7 +159,7 @@ fun func2(Int a, Str b, Int? c=None, [Int d]) {
 [int] list := [1, 2, 3]
 func1(list...) !! Type error because the number of arguments may not match if list had a different value.
 func2(1, "2", list...) !! Success as the excess length of the list can be caputed by the sequence capturing arugment, d.
-func2(*list) !! type error because the second argument type does not match
+func2(list...) !! type error because the second argument type does not match
 
 !! Expanding a tuple with heterogenous types 
 (Int, Str, Int) tuple := (1, "2", 3) 
@@ -164,24 +170,33 @@ func2(tuple...)
 func1(arr2..., 3)
 ```
 
-=== Type Expression for a Function Type
-The type expression for a function mirrors the anonymous function syntax with a return type instead of a body, and with type names instead of identifiers for non-keyword arguments. 
+=== Type Expression for a Function Interface
+The type expression for a function mirrors the anonymous function syntax with a return type instead of a body, and with type names instead of identifiers for non-keyword arguments. Arguments are marked as optional by placing an equal sign after the argument, but default values are not specified in an interface.
 
 ```Lodge
 !! Full syntax
-(Type, ... | Type kw_name, Type keyword=, ..., [Type], {Type})=>ReturnType
+(Type, Type=, ... | Type keyword, Type keyword=, ..., [Type], {Type})=>ReturnType
 
 !! Only positional arguments
-(Type, Type2, ...)=>ReturnType
+(Type, Type, ..., Type)=>ReturnType
 
 !! Only keyword arguments
-(| Type1 keyword1, Type2 keyword2=, ..., TypeN keywordN)=>ReturnType
+(| Type keyword, Type keyword=, ..., Type keyword)=>ReturnType
 
 !! Only Captures
 ([Type])=>ReturnType
 ({>Type})=>ReturnType
 
 ```
+
+There is also syntax for marking the function interface as non-callable. If the first token in a function type expression is an asterisk `*`, the function interface is non-callable. Non-callable function interfaces allow participation by functions even if the interface is missing mandatory arguments of the participating function.
+
+```Lodge
+(*)=>Any !! Allows participation by any function
+
+(* Int)=>Str !! Allows participation by any function that takes an Int as its first argument, and returns a Str.
+```
+
 
 ==== Map Expansion
 It is also possible to do perform similar action with keyword arguments using the `...` suffix. Arguments provided this way much be optional as the contents of the map cannot be verified at compile time.

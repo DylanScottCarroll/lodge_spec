@@ -20,7 +20,8 @@ interface A {
 interface B {
 	get val Str
 }
-``` 
+```
+
 The line `(A & B)` would result in a compiler error.
 
 The failure of union is a non-ideal outcome, thus it is best practice in lodge to avoid constructing classes that are likely to result in failures when unioned with interfaces that they are likely to be unioned with.

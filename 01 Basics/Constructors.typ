@@ -36,6 +36,8 @@ The constructor itself has the type of a function that takes  the constructor ar
 
 
 ==== Anonymous Constructors
+#review[This syntax may be removed or replaced with an anonymous object syntax. The usefulness of anonymous constructors seems limited, but objects without named constructors may be useful and this odd double parenthesis syntax is clunky]
+
 Constructors can also be created without names in order to allow the creation of an object without needing to write a dedicated named constructor for it.
 
 The anonymous values will participate in the typing system as normal, and can even be placed in other variables using the `var` keyword.
@@ -45,9 +47,6 @@ var anonValue := struct (){
 	!! Value body
 }()
 ```
-
-Even though the constructor does not have a defined name, it will still have an internal name and interface like any other class.
-
 
 === Public/Private Methods and Fields
 
@@ -78,7 +77,7 @@ Getters and setters can be defined by the `get` and `set` keywords, which are on
 ```Lodge
 
 struct A {
-	Int _val;
+	Int _val
 	get Int val {
 		return _val
 	}
@@ -98,9 +97,9 @@ The get and set type for a given property do not have to be the same. In fact, t
 
 
 === This
-Anywhere inside the body of a struct, the identifier `this` is in scope, referring to the value being created by the innermost enclosing struct.
+Anywhere inside the body of a struct, the identifier `this` is in sc fope, referring to the value being created by the innermost enclosing struct.
 
-It is considered (by me) bad practice not to use `this` when referring to a struct member from inside a method.
+It is considered (by me) bad practice not to use `this` when referring to a struct member from inside a method as it makes it unclear where the value is coming from.
 
 ```
 struct A(){
@@ -112,6 +111,11 @@ struct A(){
   }
 }
 ```
+
+==== This Escape
+There are special rules surroinding `this`, as it poses some race condition concerns. End of scope includes function bodies inside 
+
+
 
 === Operator Methods
 
@@ -165,17 +169,15 @@ The intention being that even if `A` was implemented with no knowledge of `B`, `
 
 The type conversion operator must always be implemented using a function generic as the return type must mach the constructor argument given. In fact, the implementation of the type conversion operator must be a function with a generic return type which takes a function that returns that same type.
 
-#text(fill:red)[I'm realizing here that there isn't a good way to represent all possible functions generically; the union between all functions fails...]
-
 ```
-fun -> <T> ( (*)=>T con)
+fun -> <T> ( (*)=>T constructor)
 ```
 
 
 Then, the body of the type conversion operator would rely on type switching on struct types to 
 
 ```
-fun -> <T> T ( (*)=>T ) {
+fun -> <T> T ( (*)=>T constructor ) {
   swype 
   
 }
@@ -265,7 +267,7 @@ struct B(Int age){
 
 
 === Generics
-Struct declarations can also take additional type parameters before the argument list inside angle brackets. In the body of the struct, these parameters can be used as normal types.
+Like functions, struct declarations can also take additional type parameters before the argument list inside angle brackets. In the body of the struct, these parameters can be used as normal types.
 
 ```Lodge
 struct A<T>(){
@@ -323,7 +325,25 @@ b2.field := "string"
 
  For constructor A, both strings and integers can be placed into the field regardless, but with class B, only the generic type specified at the creation of the object can be placed in the field.
 
-=== Early Returns within Structs
-The `return` keyword is not allowed in structs whatsoever, as returning early from a struct could lead to variables defined after the `return` not being in scope yet. However, this would result in the struct having multiple possible interfaces.
+=== Early Returns within Constructors
+The `return` keyword has special restrictions within constructors. The implicit return of a constructor returns the value that the current invocation of the struct is defining. This value cannot be returned early (i.e. with a bare `return`) as it may be the case that not all members have been defined.
 
-It could be allowed iion scope? If they're just in scope inside functions,f every member defined after the return were made private, but this is quite opaque.
+The return keyword is allowed if it takes an argument compatible with thee struct. In this case, the value being constructed is discarded and the specified value is returned by the invocation of the constructor.
+
+
+This makes the singleton pattern very simple:
+```Lodge
+
+A? instance = None
+
+struct A {
+	if instance != None {
+		return instance
+	}
+
+	!! Struct body
+	
+	instance = this
+} 
+
+```
