@@ -103,119 +103,119 @@
 #outline(depth:2)
 
 = Preface
-#include "00 Preface.typ"
+#include "00-Preface.typ"
 
 = Basics 
 
 == Statements
-#include "01 Basics/Statements.typ"
+#include "01-Basics/Statements.typ"
 
 == Comments
-#include "01 Basics/Comments.typ"
+#include "01-Basics/Comments.typ"
 
 == Variables
-#include "01 Basics/Variables.typ"
+#include "01-Basics/Variables.typ"
 
 == Built-In Types
-#include "01 Basics/Built-In Types.typ"
+#include "01-Basics/Built-In Types.typ"
 
 == Type Expressions
-#include "01 Basics/Type Expressions.typ"
+#include "01-Basics/Type Expressions.typ"
 
 == Operators
-#include "01 Basics/Operators.typ"
+#include "01-Basics/Operators.typ"
 
 == Control Flow
-#include "01 Basics/Control Flow.typ"
+#include "01-Basics/Control Flow.typ"
 
 == Loops
-#include "01 Basics/Loops.typ"
+#include "01-Basics/Loops.typ"
 
 
 == Functions
-#include "01 Basics/Functions.typ"
+#include "01-Basics/Functions.typ"
 
 // = Reserved Keywords
-// #include "01 Basics/Reserved Keywords.typ"
+// #include "01-Basics/Reserved Keywords.typ"
 
 == Constructors
-#include "01 Basics/Constructors.typ"
+#include "01-Basics/Constructors.typ"
 
 == Interfaces
-#include "01 Basics/Interfaces.typ"
+#include "01-Basics/Interfaces.typ"
 
 == Built-in Interfaces
-#include "01 Basics/Built-In Interfaces.typ"
+#include "01-Basics/Built-In Interfaces.typ"
 
 
 
 = The Type System
 
 == The Lodge Type Checker
-#include "02 Typing/Type Checking.typ"
+#include "02-Typing/Type Checking.typ"
 
 == Interface Compatibility
-#include "02 Typing/Interface Compatibility.typ"
+#include "02-Typing/Interface Compatibility.typ"
 
 == Function Interfaces
-#include "02 Typing/Interface of a Function.typ"
+#include "02-Typing/Interface of a Function.typ"
 
 == Type Set Operations
-#include "02 Typing/Type Set Operations.typ"
+#include "02-Typing/Type Set Operations.typ"
 
 == Type Unions
-#include "02 Typing/Type Unions.typ"
+#include "02-Typing/Type Unions.typ"
 
 == Type Intersections
-#include "02 Typing/Type Intersections.typ"
+#include "02-Typing/Type Intersections.typ"
 
 == Interface Set Operations
-#include "02 Typing/Interface Set Operations.typ"
+#include "02-Typing/Interface Set Operations.typ"
 
 == Interface Intersection
-#include "02 Typing/Interface Intersection.typ"
+#include "02-Typing/Interface Intersection.typ"
 
 
 == Interface Union
-#include "02 Typing/Interface Union.typ"
+#include "02-Typing/Interface Union.typ"
 
 == Errable and Nonable Types
-#include "02 Typing/Errable and Nonable Types.typ"
+#include "02-Typing/Errable and Nonable Types.typ"
 
 == Type Switching
-#include "02 Typing/Type Switching.typ"
+#include "02-Typing/Type Switching.typ"
 
 // == Formalization
-// #include "02 Typing/Formalization.typ"
+// #include "02-Typing/Formalization.typ"
 
 
 
 = Intermediate
 
 == Scoping Rules
-#include "03 Intermediate/Scoping Rules.typ"
+#include "03-Intermediate/Scoping Rules.typ"
 
 == Enums
-#include "03 Intermediate/Enums.typ"
+#include "03-Intermediate/Enums.typ"
 
 
 == With Statements
-#include "03 Intermediate/With Statements.typ"
+#include "03-Intermediate/With Statements.typ"
 
 == Broadcasting
-#include "03 Intermediate/Broadcasting.typ"
+#include "03-Intermediate/Broadcasting.typ"
 
 == Closures
-#include "03 Intermediate/Closures.typ"
+#include "03-Intermediate/Closures.typ"
 
 == Error Handling
-#include "03 Intermediate/Error Handling.typ"
+#include "03-Intermediate/Error Handling.typ"
 
 == Imports
-#include "03 Intermediate/Imports.typ"
+#include "03-Intermediate/Imports.typ"
 
 == Include Statements
-#include "03 Intermediate/Include Statements.typ"
+#include "03-Intermediate/Include Statements.typ"
 
 == Memory Managed Types
-#include "03 Intermediate/Memory Managed Types.typ"
+#include "03-Intermediate/Memory Managed Types.typ"
