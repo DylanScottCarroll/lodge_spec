@@ -13,7 +13,7 @@ struct A {
 }
 ```
 
-The primary way to interact with a Data field is to access it at a byte level using slice/index notation, which returns a Bytes object, which can be assigned and passed around. Unlike array bounds access, this does not return an errable value. If a Data field has an out-of-bounds access, lodge will simply crash #text(fill:red)[(maybe not?)] 
+The primary way to interact with a Data field is to access it at a byte level using slice/index notation, which returns a Bytes object, which can be assigned and passed around. Unlike array bounds access, this does not return an errable value. If a Data field has an out-of-bounds access, lodge will simply crash #review[(maybe not?)].
 
 Additionally, the Bytes object defines a type conversion operator `->` capable of handling . If the Bytes object contains a number of bytes equal to the size of objects defined by the struct, it will produce. Likewise, it defines the reverse type conversion operator that any struct can be defined.
 

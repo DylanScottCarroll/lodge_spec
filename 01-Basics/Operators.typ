@@ -48,8 +48,8 @@ The value equivalence operator `==` should not be confused with the assignment o
 #table(columns: (4em, 20em), stroke: 0.5pt)[
  op    ][ action ][
  `:=`    ][ assignment ][
- `++`    ][ increment ][
- `--`    ][ decrement ][
+ `++`    ][ increment (postfix only) ][
+ `--`    ][ decrement (postfix only) ][
 `{op}=` ][ Any other infix operator followed by an '=' will be the same as that operator's assignment operator ]
 
 === Other Operators
@@ -62,23 +62,23 @@ The value equivalence operator `==` should not be confused with the assignment o
  `?`     ][ None Resolution Operator ][
  `{op}~` ][ broadcasting directive   ][
  `{op}$` ][ Reverse operator         ][
- `=`     ][ hash                     ][
+ `#`     ][ hash                     ][
  `@`     ][ Unused                   ]
 
 === Broadcasting Operators
-Using the ~ symbol after an operator indicates that the operation should be broadcast. At least one of the operands of a broadcast operator should be a sequence of some kind. Broadcast operators have the same precedence of the non-broadcast version
+Using the `~` symbol after an operator indicates that the operation should be broadcast. At least one of the operands of a broadcast operator should be a sequence of some kind. Broadcast operators have the same precedence of the non-broadcast version
 
 
-This can be used to expand mathematical operations
+This can be used to expand mathematical operations.
 ```Lodge
-var list = [0:10]
-var powers_of_two = 2 **~ list
+[Int]  = [0:10]
+[Int] powers_of_two = 2 **~ list
 ```
 
-Function calls can also be broadcast
+Function calls can also be broadcast.
 ```Lodge
-[Float] values = ( [:314] /~ 100 )
-[Float] mapped_values = cos~(values) !!This applys the cosine function to every value in values
+<Float> values = ( <:314> /~ 100 )
+<Float> mapped_values = cos~(values) !!This applys the cosine function to every value in values
 ```
 
 You can also broadcast generator objects, which will be evaluated lazily
@@ -103,15 +103,16 @@ Broadcasting multiple sequences together will pair them element-wise.
 
 
 === Reverse Operator 
-When any operator is followed by a dollar sign, it simply applies the reverse of the given operator
+When any operator is followed by a dollar sign, the operator is applied as if the order of the operands were reversed.
 
 ```Lodge
 denominator /$ numerator
 ```
 
+This syntax is also used in defining #link(<Basics.Constructors.Operator_Methods.Reverse_operator_methods>)[reverse operator methods].
 
 === Type Conversion Operator
-The type conversion operator `->` is the way to convert an object of one type into another.
+The type conversion operator `->` is the main way of expressing the conversion from one type to another. The left hand side of the operator must be a value that has an operator method that accepts the resulting type of the type expression on the right hand side.
 
 
 ```Lodge
@@ -120,18 +121,19 @@ Str myStrRepr := myObj->Str
 Int myInt := myFloat->Int
 ```
 
-The type conversion operator is special because the right hand side is parsed as a #section-link("Type Expressions", "", "type expressions") rather than a value expression. In that sense it is not a normal operator and more of a conversion directive. Like other operators, its behavior is determined by #link(<Basics.Constructors.Type_Conversion_Methods>, "operator methods"), but these methods have their own special semantics that differ from the other type conversion methods 
+
+The type conversion operator is special in that the right hand side is a type expression. #link(<Basics.Type_Expressions>)[type expression] rather than a value expression. In that sense, it is not a normal operator and more of a type conversion directive. Also for that reason, there is no inverse type conversion operator ->~ because types cannot have methods. Like other operators, its behavior is determined by #link(<Basics.Constructors.Type_Conversion_Methods>, "operator methods"), but these methods have their own special semantics that differ from the other type conversion methods 
 
 
 
 === Error Resolution Operator
-Shorthand for resolving errors
+Lodge has a value-based error system that relies on type unions. The error resolution operator is shorthand for handling type unions that contain errors.
 
 Errable functions are functions that have the potential to return an error, meaning that the return type is the union of some type and `Err`. In order to use the return value of an errable function, you need to handle the possibility of an error.
 
 Often times, handling an error just consists of passing it further up the call stack for the caller do handle. For this, the unary `!` operator is used. It will evaluate to a non-Err value or return Err from the function.
 
-Here is a common pattern:
+Consider this pattern:
 ```Lodge
 fun function() Int! {
 	Int val := errableFunction()!
@@ -139,10 +141,7 @@ fun function() Int! {
 }
 
 ```
-
-Which is equivalent to:
-
-
+	This is equivalent to the following code without `!`.
 
 ```Lodge
 fun function() (Int | Err) {
@@ -155,15 +154,15 @@ fun function() (Int | Err) {
 See #link(<The_Type_System.Type_Switching>)[Type Switching] for more about this syntax.
 
 ==== Binary Error Resolution Operator
-Sometimes, instead of passing up the error, it is better simply to have a default value in case of an error. For these cases, there is also a binary version of the error resolution operator, `!?`. 
+Sometimes, instead of returning the error, it is better simply to have a default value in case of an error. For these cases, there is also a binary version of the error resolution operator, `!?`. 
 
 ```Lodge
 fun function() Err! {
 	Int val := errableFunction() !? -1
 } 
-
-!! Is equivalent to
-
+```
+This is equivalent to:
+```
 fun function() Int! {
 	!Int result = errableFunction()
 	Int val := swype result {
@@ -175,14 +174,13 @@ fun function() Int! {
 ```
 
 ==== In Type Expressions
-The `!` token is also used to make an Errable type:
+The `!` token is also used in type expressions to make an Errable type:
 
+The following to declarations are equivalent:
 ```Lodge
 fun errableFunction() (Err | Str) {
 	!! ...
 }
-
-!! Is equivalent to
 
 fun errableFunction() Str! {
 	!! ...
@@ -196,11 +194,9 @@ The None resolution operator applies to variables whose type is a union that con
 
 The following two code snippets are equivalent:
 ```Lodge
-Int? temp = nonableFunction()
-
-Int variable = swype variable {
-	None : { -1 }
-	Int  : { temp }
+Int variable = swype nonableFunction() {
+	None  : { -1 }
+	Int a : { a }
 }
 ```
 
@@ -208,12 +204,14 @@ Int variable = swype variable {
 Int variable = nonableFunction() ? -1
 ```
 
-
 Unlike the error resolution operator, there is no unary version of the None resolution operator
+
 === Operator Precedence
-This section is mostly for parser reference, you can mostly skip this.
+This section is mostly for parser reference, you can skip this.
 
 Operators are listed in order of increasing precedence, categorized into groups, and given names for implementation purposes.
+
+#review[To-do: make this section more readable.]
 
 #[
 #show raw.where(): r => block(r, stroke: 0.5pt, inset: 1em)

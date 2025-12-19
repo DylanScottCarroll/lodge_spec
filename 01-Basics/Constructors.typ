@@ -1,7 +1,9 @@
 #import "../shared.typ": *
 
 === Constructors
-New types in lodge are defined using special functions called constructors (struct for short). When a constructor executes, it returns a new object of the type it defines. The members of this new object are variables that existed in the scope of the constructor. The definition of a constructor also implicitly defines an interface with the same name.
+New types in lodge are defined using special functions called constructors (struct for short). When a constructor executes, it returns a new object of the type it defines. The members of this new object are variables that existed in the scope of the constructor. In that way, a constructor could be considered a function for which 1) its 
+
+The definition of a constructor also implicitly defines an interface with the same name.
 
 Multiple constructors can produce values with the same public interface and they will be treated equivalently. In that way, types in lodge are defined entirely by form and function rather than a notion of identity. 
 
@@ -22,7 +24,7 @@ struct ConstructorName(Type1 arg1, Type2 arg2, ...) {
 }
 ```
 
-The objects produced by a constructor have an interface consisting of the variable names and types in the scope of the constructor. This example constructor produces the following interface for its values.
+The objects produced by a constructor have an interface consisting of the variable names and types in the scope of the constructor. This example constructor produces the following interface for its values ?.
 ```Lodge
 interface ConstructorName {
 	Int field
@@ -97,7 +99,7 @@ The get and set type for a given property do not have to be the same. In fact, t
 
 
 === This
-Anywhere inside the body of a struct, the identifier `this` is in sc fope, referring to the value being created by the innermost enclosing struct.
+Anywhere inside the body of a struct, the identifier `this` is in scope, referring to the value being created by the innermost enclosing struct.
 
 It is considered (by me) bad practice not to use `this` when referring to a struct member from inside a method as it makes it unclear where the value is coming from.
 
@@ -113,9 +115,12 @@ struct A(){
 ```
 
 ==== This Escape
-There are special rules surroinding `this`, as it poses some race condition concerns. End of scope includes function bodies inside 
 
+#expand
 
+#text(fill:red)[Define the rules surrounding escape analysis for the this object.]
+
+In theory, `this` cannot be assigned to a variable from an enclosing scope until all of the members of the struct have received values, as tha could cause threaded code to refer to a partially initialized struct, which would be a nightmare (technical term). This logic would be similar to #link(<Intermediate.Scoping_Rules.Function_Declarations.Escape_Analysis>, [function escape analysis]).
 
 === Operator Methods
 
@@ -142,7 +147,7 @@ struct A {
 		!! Value retrieving logic
 	}
 	
-fun [set] Int value, Int index, Int? End=None, Int? Step=None){
+fun [set] (Int value, Int index, Int? End=None, Int? Step=None){
 		!! Value assigning logic
 	}
 }
@@ -154,9 +159,9 @@ It is best to use the broadest possible type for the operator method. These meth
 
 ==== Reverse operator methods
 
-When an operator acts on two values, the compiler will look in the interface of the first object that can accept the interface of the second object. If it does not, it will look in the second interface for the #section-link("04 Operators", "Reverse Operator", "reverse operator") method (the operator followed by the `~` symbol) that can accept the first interface.
+When an operator acts on two values, the compiler will look in the interface of the first value for an operator method that can accept the interface of the second value. If there is no such method, it will look in the second vlaue for the #section-link("04 Operators", "Reverse Operator", "reverse operator") method (the operator followed by the `~` symbol) that can accept the first interface.
 
-For example, take the expression `a / b` for objects of classes `A` and `B`.
+For example, take the expression `a / b` for values from structs `A` and `B`.
 
 If `A` implements `/` for the type of `B`, then that method will be called on `a` with `b` as an argument.
 
@@ -174,14 +179,9 @@ fun -> <T> ( (*)=>T constructor)
 ```
 
 
-Then, the body of the type conversion operator would rely on type switching on struct types to 
+Then, the body of the type conversion operator would rely on type switching on struct types to determine what value to return.
 
-```
-fun -> <T> T ( (*)=>T constructor ) {
-  swype 
-  
-}
-```
+#review[The type checking logic here needs to be scrutinized.]
 
 === Promising
 When a constructor promises an interface, all public fields and methods are required to be explicitly defined in the promising constructor. Because of #section-link("02 Interfaces", "Automatic Interfacing", "automatic interfacing"), satisfied promises only makes a difference from the perspective the programmer and doesn't result in code that compiles any differently. The advantage to promising is that it becomes impossible to fail to implement any of the promised methods or fields. 
@@ -230,6 +230,8 @@ struct B() {
 This is roughly equivalent to the following code where `_a`  is declared as a member with the type `A` and all of the public methods, getters, and setters are conveyed.
 ```
 struct B() {
+	  promises A
+		
     A _a = A()
     get Int val { _a.val }
     set Int val { _a.val := val}
@@ -245,29 +247,15 @@ The difference between wrapping a class and manually defining the members as in 
 
 
 ==== Multiple Wrapping
-It is possible for one struct to wrap multiple others. In the case that public properties or methods would result in a name collision, members from later wrap declarations take priority as they are defined later. However, the struct as a whole must still satisfy the interfaces of both wrapped structs. If wrapping multiple structs would violate this, the code will not compile.
+It is possible for one struct to wrap multiple others. In the case that public properties or methods would result in a name collision, members from later wrap declarations take priority as they are defined later #review[(or, potentially, the programmer would be forced to explicitly define that member)]. However, the struct as a whole must still satisfy the interfaces of both wrapped structs. If wrapping multiple structs would violate this, the code will not compile.
 
 ==== Aware Wrappers
-One difference between wrapping and types of superclass extension present in other languages is that a wrapped class will always call its own implementation of a function and never the overwritten version. Consider the following example
+#expand
 
-```
-struct Shape(Int size) {
-  
-  fun printArea() {
-    print(this.area)
-  }
-}
-
-struct B(Int age){
-  wraps _a = A(age)
-
-  
-}
-```
-
+An aware wrap is when `this` is passed into the constructor of the value being wrapped. In that way, the "super" struct has access to the fields of the wrapping struct. This passing of `this` is subject to escape analysis, so the wrap statement may need to happen later.
 
 === Generics
-Like functions, struct declarations can also take additional type parameters before the argument list inside angle brackets. In the body of the struct, these parameters can be used as normal types.
+Like functions, struct declarations can also take additional type parameters before the argument list inside angle brackets. In the body of the struct, these parameters can be used as  types.
 
 ```Lodge
 struct A<T>(){
@@ -280,7 +268,7 @@ int val := a.field
 
 When the `<T>` is specified, all instances of the type name `T` found in the class definition will be replaced with whatever the type is at the object creation. `T` could be any identifier, but a single uppercase letter is standard.
 
-There is only one implementation for each generic, which simply uses the narrows type union that encapsulates all possible values of T. The difference occurs with the type checker; the type of T is known at compile time for a given object, so the return types of methods can be checked statically and type errors are avoided.
+There is only one implementation for each generic, which simply uses the narrowest type union that encapsulates all possible values of T. The difference occurs with the type checker; the type of T is known at compile time for a given object, so the return types of methods can be checked statically and type errors are avoided.
 
 You can also specify restrictions on the generic types with interfaces or type unions.
 
@@ -289,7 +277,7 @@ struct A<Iterable T> {
 	...
 }
 
-struct B<(int | str | list) T> {
+struct B<(Int|Str) T> {
 	...
 }
 ```
@@ -337,7 +325,7 @@ This makes the singleton pattern very simple:
 A? instance = None
 
 struct A {
-	if instance != None {
+	if instance isnt None {
 		return instance
 	}
 

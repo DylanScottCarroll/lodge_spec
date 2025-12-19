@@ -1,6 +1,8 @@
-#set text(font: "Noto Sans")
+#import "shared.typ": *
 
-#let ver = "0.0.1*"
+#set text(font: "Calibri", size:12pt)
+
+#let ver = "0.0.1"
 
 #let to-string(it) = {
   if type(it) == str {
@@ -23,25 +25,25 @@
 
 #show heading.where(level:1): it => [
   #pagebreak()
-  #set text(size: 32pt, weight: "light")
+  #set text(size: 2.666em, weight: "light")
   #align(center+horizon)[#it]
-  #set text(size: 12pt, weight: "regular")
+  #set text(size: 1em, weight: "regular")
   #linebreak()
 ]
 
 #show heading.where(level:2): it => [
-  #set text(size: 18pt, weight: "regular")
+  #set text(size: 1.5em, weight: "regular")
   #it
 ]
 
 #show heading.where(level:3): it => [
-  #set text(size: 14pt, weight: "regular" )
+  #set text(size: 1.2em, weight: "regular" )
   #underline[#it]
 ]
 
 #show heading.where(level:4): it => [
-  #set text(size: 12pt, weight: "semibold")
-  #it
+  #set text(size: 1.1em, weight: "bold")
+  *#it*
 ]
 
 
@@ -116,11 +118,11 @@
 == Variables
 #include "01-Basics/Variables.typ"
 
-== Built-In Types
-#include "01-Basics/Built-In Types.typ"
-
 == Type Expressions
 #include "01-Basics/Type Expressions.typ"
+
+== Built-In Types
+#include "01-Basics/Built-In Types.typ"
 
 == Operators
 #include "01-Basics/Operators.typ"
@@ -194,6 +196,9 @@
 
 == Scoping Rules
 #include "03-Intermediate/Scoping Rules.typ"
+
+== Memory Management
+#include "03-Intermediate/Memory Management.typ"
 
 == Enums
 #include "03-Intermediate/Enums.typ"

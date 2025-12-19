@@ -1,31 +1,32 @@
 #import "../shared.typ": *
 
 === Declaring and Assigning Variables
-A variable declaration consists of a #section-link("Type Expressions", "", "type expression"), a variable name, and an assignment. Variables cannot be declared without being assigned a value. If a variable has no sensible default value, consider using a #section-link("04 Errable and Nonable Types", "Nonable", "nonable") type.
 
-Assignment occurs using the `:=` operator.
+A variable declaration consists of a #link(<Basics.Type_Expressions>)[type expression], a variable name, the assignment operator `:=`, and an expression. After the variable declaration statement, a name bound to the value of the expression will exist in the enclosing scope until that scope ends. In the most comon case, the type expression takes the form of a single type.
+
+Variables cannot be declared without being assigned a value. Variables that need a default value should use something like `None` and be defined with a #link(<The_Type_System.Errable_and_Nonable_Types>, "nonable type").
 
 ```Lodge
 Int value2 := 10    !! Declaring an int variable and assigning it a value
 ```
 
-Assignment also does not need to be a standalone statement, but can be an expression that returns a value. The value returned by an assignment expression is the assigned value.
+Like all statements, declarations (like assignments) may be expressions, returning the value the variable was assigned to.
 ```Lodge
 !! Print out the characters from a file until the character 'a' is reached
-Str c := ""
-loop while (c := file.getChar()) != 'a' {
+loop while (Str c := file.getChar()) != 'a' {
   print(c)
 } 
-```Lodge is garbage-collected, so created values do not need to be manually freed.
+```
 
 === Variable Types
-In Lodge, variables types are not defined by the concrete type they are declared with. Instead, the type of a variable is the public interface of that type. This means that a variable is not restricted to just the type it was declared with. Instead, any value with a #section-link("04 Interface Compatibility", "", "compatible interface") can be stored in that variable. For example, a variable with the default `Int` type can store any integer value.
+The type of a variable determines what values may be assigned to that variable. The values that can be assigned to a given variable are not restricted only to values of the declared type. Instead, any value whose public interface is the superset of that of the declared type may be assigned to that variable. In other words, a variable may contain any value with a #link(<The_Type_System.Interface_Compatibility>)[compatible interface]. Likewise, the type the a variable is declared with does not have to be a type with a defined constructor: it could also be an interface or a type expression.
 
-Likewise, the type the programmer variable declares a variable with does not have to be a type with a defined constructor. It could also be an interface or a type expression.
+
+The full behaviors of Lodge's type checking system is found in #link(<The_Type_System>)[The Type System]
 
 === Var Keyword
 
-When variables are declared with the `var` keyword instead of a type, the variable being declared takes the same type as the value on the right side of the assignment.
+When variables are declared with the `var` keyword instead of a type, the variable's type is inferred from the right hand side of the assignment.  f
 
 ```Lodge
 Int a = 10
@@ -66,36 +67,4 @@ Interface {
 
 
 
-The full behaviors of Lodge's type checking system is found in #link(<The_Type_System>)[The Type System]
 
-=== Union Types
-Instead of creating a variable with just a single type, it is also possible in Lodge to define a variable with a composite type called a #section-link("03 Type Unions", "", "type union"). This allows a variable to store any value that has a compatible interface with *any* type in the union.
-
-```Lodge
-(Str | Int) x
-
-!! Allowed
-x := 10
-x := "Hello World"
-```
-
-Composite types can also be given names with the `as` keyword
-
-```Lodge
-(Str | Int) as StrInt
-StrInt x = "10"
-x = x->Int
-```
-
-
-=== Circular Type Definitions
-
-There may be cases where a composite type declaration may want to refer to itself, which is allowed in Lodge. 
-
-
-Here's an example of how a tuple containing two values can be used to create something akin to a linked list
-```Lodge 
-((int, listelement) | None) as listElement
-
-listElement list = (0 (1, (2, (3, None))))
-```

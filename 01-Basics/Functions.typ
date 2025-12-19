@@ -276,7 +276,7 @@ fun map [Obj]([Obj] seq, (Obj)=>{Obj} f) {
     return loop for val = seq { f(val) }
 }
 ```
-Since the type checker has no assurance that anything besides objects are being passed around here, the programmer is forced to perform numerous cumbersome swype operations to invoke any particular functionality.
+Since the type checker has no assurance that anything besides objects are being passed around here, the programmer is forced to perform numerous cumbersome unsafe swype operations to invoke any particular functionality.
 ```
 fun square Obj(Obj x) {
   return swype x {Int: {x**2}, *: { panic() }}
@@ -297,7 +297,7 @@ fun square Int(Int x){ return x**2 }
 [Int] result = map<Int, Int>([1, 2, 3, 4, 5], square)
 ```
 
-Additionally, explicit type parameters can be omitted if the type parameters can all be inferred from argument types.
+Additionally, explicit type parameters can be omitted if the type parameters can all be inferred from argument types. #review[I felt really smart for coming up with this until I later learned that java does this as well.]
 
 In the following example, the type `T` is inferred from the value of the first argument and the type `S` is inferred from the return type of the second argument.
 ```Lodge

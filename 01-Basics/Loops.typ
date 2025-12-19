@@ -15,20 +15,20 @@ loop {
 ```
 
 
-==== While Loop
-A while loop takes a boolean expression and will repeat its body code until the expression evaluates to false.
+==== Conditional Loop
+A conditional loop takes a boolean expression and will repeat its body code until the expression evaluates to false.
 
 ```Lodge
 !! Print all the values on the stack
 loop not stack.is_empty() {
-	ints val = stack.pop()
+	Int val := stack.pop()
 	print(val)
 }
 ```
 
 
 ==== For Loop
-The for-loop works like for-each loops in other languages. It accepts any object that is compatible with the Iter interface and loops over each element. The type of the loop variable is inferred from the values in the container being iterated over.
+The for-loop works like a for-each loop. It accepts any object that is compatible with the Iterable interface and loops over each element. The type of the loop variable is inferred from the values in the container being iterated over.
 
 ```Lodge
 !! Print all of the characters in the list
@@ -62,25 +62,26 @@ The keywords `break` and `continue` work as they do in similar languages.
 `continue` will skip to the beginning of the nearest loop that encapsulates it
 
 ==== Conditional break/continue
-Lodge also has the ` break if ` and ` continue if ` statements which act as conditional statements.
-```Lodge
-loop for value = value_list {
-	break if value == None
-	
-	print(value)
-}
+Lodge also has the ` break if ` and ` continue if ` statements which act as conditional statements. The following two snippets are equivalent:
 
-!! Equivalent to
-
-loop for value = value_list {
-	if value == None { break }
-
-	print(value)
-}
+#grid(columns:(1fr, 1fr))[
+	```Lodge
+	loop for value = value_list {
+		break if value == None
+		print(value)
+	}
 ```
+][
+	```Lodge
+	loop for value = value_list {
+		if value == None { break }
+		print(value)
+	}
+	```
+]
 
 ==== Deep break/continue
-If the `break` or `continue` keywords is followed immediately by an integer literal, the statement will apply  to that many nested loops. The value 1 is equivalent to an unspecified depth.
+If the `break` or `continue` keywords is followed immediately by an integer literal, the statement will apply  to that many nested loops. The value 1 is equivalent to an unspecified depth. This will result in an error if there are fewer than that many nested loops in the current function.
 ```Lodge
 Float t = time()
 loop for i := :100 {
@@ -91,4 +92,3 @@ loop for i := :100 {
 }
 ```
 
-This will result in an error if there are not that many nested loops in the current function.

@@ -1,125 +1,126 @@
 #import "../shared.typ": *
 
-=== Basic Types
-==== Integer
-value type
+=== Integer -- `Int`
+	The default representation of an integer is a 64-bit signed value. The interfaces compatible with the `Int` interface are those whose members imply whole-numbers. 
 
-`Int`
-- Defaults to 64 bit integer value, but other subtypes are available.
-- Interface does not allow float values
+	Integer Literals consist of any number of digits 0-9 such that the number is within the bounds represented. Literals may be interpreted with different bases by adding a prefix. The prefix "0b" specifies binary and the prefix "0x" specifies hexadecimal.
 
-==== Floating Point
-value type
+=== Float -- `Float`
+	The default representation of a float is a 64-bit floating point value. The inteface of `Float` allows for any real number, which includes integer values.
 
-`Float`
-- Defaults to 64 bit floating point value, but other subtypes are available.
-- Interface also allows Int values
-
-==== Numbers
-Interface
-
-`Num`
-- An interface that can hold both Floats and Ints (also maybe complex numbers if they get introduced to the spec)
-- No literals default to Num
-
-==== Booleans
-value type \
-`Bool`
+	Float literals consist of any number (including zero) digits 0-9, a period `.`, and any number of digits 0-9.  
 
 
-
-==== Strings
-reference type\ 
-`Str`
-- A reference type object much like strings in other languages
-- Basically just an immutable array of chars
-	- Potentially just a chunk of data, allowing for various representations
-	- #section-link("Lodge Text Encoding", "", "")
-- String literals are created using text surrounded by double quotes like this:
-```Lodge
-Str aString := "A new string literal"
-```
-
-==== None
-value type
-
-The None type has the special property of being compatible with no interface besides None, having no other interface be compatible with it besides None.
-
-Uses
-- Indicate that something does not exist
-- When a variable has a None in its union, the interface is empty and you would need to check that the value is not None in a #section-link("05 Type Switching", "", "type switch") before you could do any operations with it.
-- If variables don't have an initial value, setting the value to None is the only option, forcing a check.
-- Used as a default value for function arguments when that argument doesn't always need to be present. This is useful for #section-link("08 Functions", "Variadic Functions", "variadic functions and optional parameters").
+=== Number -- `Num`
+	Number is not a concrete type but rather an interface indicating a number of any kind. #review[(This could be removed as float already does this)]
 
 
-=== Data Structure Types
-All data structure types are reference types
+=== Boolean -- Bool
+	Represents either the logical value "true" or the logical value "false". Likewise, boolean literals are simply either the special token `true` or the token `false`.
+
+	Logical comparison operators in lodge must evaluate to something compatible with booleans. #review[What can the interface of a boolean do to promise true/false -ness?]
 
 
-==== Tuple
-- literal: `(value1, value2, value3)`
-	- `(value,)` for a single value
-- type definition: `(type1, type2, type3)`
-	- `(Type : size)` when it's all the same type
+=== String -- `Str`
+	Strings are used for any text and are represented internally using utf-8 #review[(probably?)].
+
+	Strings are created using any text surrounded by double quotes `"`. Strings support a typical set of escape sequences such as `\0` for null characters, `\n` for newline charaters, and `\t` for tabs. 
+
+	There are also some special string literals indicated by prefixing the opening quotation mark with a letter. A string prefixed with an `f` is a "format string". Any set of curly brackets `{}` will interpret whatever is inside the brackets as a lodge expression to be evaluate. The resulting value converted into a string and inserted into the format string 
+
+	A string prefixed with an `r` is a "raw string". All characters in the string are interpreted literally and any escape sequences are ignored.
+
+=== None -- `None`
+	None is a singleton type with only a single value. It has the special property of being compatible with no interface besides None, and having no other interface be compatible with it besides None.
 	
-- You must declare the type for each variable in the tuple
-
-```Lodge
-(Int, Str) tuple1 := (10, "hello") 
-(Int,) tuple2 := (10,) 
-(Int: 5,) tuple3 := (1, 2, 3, 4, 5)
-(Int: 2, Str) tuple3 := (1, 2, "a", b")
-```
+	It is used to indicate that a value does not exisit. When a type union is created with none, the interface is empty and needs to be checked before any operation can be performed on it. In that way, the None construct is similar to `null` in other languages, but forces explicit checks.
 
 
-The interface for a particular tuple type contains fields for each of its elements:
-- tuple.item0
-- tuple.item1
-- ...
-- tuple.itemN 
+=== Tuple
+	A tuple is an immutable sequence of heterogeneously-typed values. 
 
-==== List
-- literal: `[value1, value2, value3]`
-- type definition: `[Type]`
-	- The type of all elements of a list must match
-- The type (union) must be the same for each element in the array
+	Tuple literals consist of comma-separated expressions enclosed in a pair of parentheses `()`.
 
-```
-[Int] list1 := [0, 1, 2, 3, 4]
-var list2 := [0, 1, 2, 3, 4]
-```
+	The interface for a particular tuple type contains fields for each of its elements:
+	```
+	interface Tuple {
+		Type0 item0
+		Type1 item1
+		...
+		TypeN itemN
+	}
+	```
 
-
-==== Map
-- literal: `{> key1 : value1, key2 : value2 }`
-- type definition: `{> Type1 : Type2}`
-- Mutable reference type
-- Implemented as a hash table
-
-```
-{> Str : Int} map1 := {> "A" : 1, "B" : 20 }
-```
+	The type expression for a tuple mirrors the literal and is a comma-separated sequence of types enclosed in parentheses. Repeated types can be replaced by that typed followed but the number of times it repeats. 
+	```Lodge
+	(Int, Str) tuple1 := (10, "hello") 
+	(Int,) tuple2 := (10,) 
+	(Int: 5,) tuple3 := (1, 2, 3, 4, 5)
+	(Int: 2, Str) tuple3 := (1, 2, "a", b")
+	```
 
 
-==== Set
-- literal: `{$ value1, value2, value3}`
-- type definition: `{$ Type}`
-- Implemented as a hash set
+	
+=== List
+  A list is a variable-length sequence of homogenously-typed values.
 
-```Lodge
-{Int} set1 = {$ ~2, 4, 6, 8 }
-```
+	List literals consist of comma-separated expressions enclosed in a pair of square brackets `[]`.
 
+	Because they are homogenously-typed the type expression consists of just a single value enclosed in square brackets.
 
-==== Generator
-- Literal: No direct literal, but range expressions can be used
-	- `<start:stop:end>`
-- Type
-	- \<Type\>
+	```
+	[Int] list1 := [0, 1, 2, 3, 4]
+	```
 
-```Lodge
-<Int> allSquares = <:>**2
-```
+	Lists also support generator-like syntaax by replacing the angle brackets with square brackts. These are evaluated eagerly unlike generators.
+
+=== Map #review[(Dictionary?)]
+	A map represent a key-value mapping from a set of values of one type to a set of values of another type. Maps are implemented as a hash table.
+
+	
+	Map literals are comma-separated key-value pairs divided by colons `:` enclosed in curly brackets. `{key1 : value1, key2 : value2 }`
+	Map type expressions consist of a single colon-separated pair of types enclosed in curly brackets. `{Type1 : Type2}`
+
+	```
+	{Str : Int} map1 := {"A" : 1, "B" : 20 }
+	```
+
+	#review[I haven't fully figured out if this syntax is ambiguous with other uses of cutly brackets in the language, but it may be possible if #link(<Basics.Control_Flow.Blocks.Naked_Blocks>)[naked blocks] are removed. If it is ambiguous, the following syntax will be used isntead:]
+
+	Alternate syntax: `{> Str : Int} map1 := {> "A" : 1, "B" : 20 }`
+
+=== Set
+  A set is a variable-length unordered sequence of homogenously-typed unique values. In other words, a set is a set of vaues with the same type. Insertion, access, and membership tests are linear operations due to the hash-table-based implementation.  
+
+	Set literals consist of comma-separated expressions enclosed in curly brackets. `{Value1, value2, value3}`
+	The type expression for a set is a single type enclosed in curly brackets. `{Type}`
+
+	```Lodge
+	{Int} set = {2, 4, 6, 8}
+	```
+
+	#review[If this syntax ends up being ambiguous with the use of curly brackts for blocks, this alternate syntax will be used instead:]
+
+	```Lodge
+	{$ Int} set = {$ 2, 4, 6, 8}
+	```
+
+=== Generator
+	A generator is a sequence of homogenously-typed values that can only be accessed sequentially. The length of a generator can be finite or unbounded.
+
+	There is a special syntax for defining number (Int or Float) generators consisting of one, two or three colon-separated values. The three values represent the start, stop (exclusive), and may be omitted in various combinations. 
+	```Lodge
+	<:Stop>
+	<Start:Stop>
+	<Start:Stop:Step>
+	<Start::Step>
+	```
+
+	The type expression for a generator is a set of angle brackets surrounding a type expression followed by a colon:
+	```Lodge
+	<Type:>
+	```
+	
 
 // ==== Value Types vs Reference Types
 // All values in Lodge are represented in memory by a #section-link("Lodge Thing", "", "thing"). 
@@ -128,3 +129,7 @@ var list2 := [0, 1, 2, 3, 4]
 // For value types, the value field is the value itself, but for reference types the value is a reference to the object in memory. 
 
 // For smaller value types like bools and bytes, there are wasted bytes in the high end of the value portion of the thing. 
+
+\
+#expand \
+#review[Later, there should be a section detailing all of the fields and methods of each of these types. But that probably should be something more akin to docs.]

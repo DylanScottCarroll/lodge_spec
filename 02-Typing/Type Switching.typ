@@ -44,7 +44,7 @@ swype a, b {
 
 #expand
 
-I haven't settled on the syntax for this yet, but there should be some way to specify that an argument in a type switch should be treated as a constructor and the swype should look at the type produced by that constructor. Due to the fact that structs are a special kind of function, this would also let the programmer switch over the type returned by a function.
+#review[I haven't settled on the syntax for this yet, but there should be some way to specify that an argument in a type switch should be treated as a constructor and the swype should look at the type produced by that constructor. Due to the fact that structs are just a special kind of function, this would also let the programmer switch over the type returned by a function.]
 
 
 ```
@@ -54,4 +54,16 @@ swype <<Con>> {
   *   : { !- The struct produces something else-! }
 }
 
+```
+
+=== Naming  the matched type
+
+Similar to value switch statements, the values matched by a particular case can be assigned a value. This just helps swype over expressions without explicitly defining intermediate values.
+
+```
+Int variable = swype function() {
+	Int a : { a }
+	*     : { -1 }
+	
+}
 ```
